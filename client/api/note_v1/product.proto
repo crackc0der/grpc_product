@@ -1,1 +1,28 @@
 syntax = "proto3";
+
+package client;
+
+option go_package = "github.com/crackc0der/test_grpc";
+
+service Product {
+    rpc GetProduct(ProductRequest) returns (ProductMessage);
+    rpc GetAllProducts(AllProductRequest) returns (AllProductMessage);
+}
+
+message ProductMessage {
+    int64 Id = 1;
+    string ProductName = 2;
+    float ProductPrice = 3;
+    int64 ProductCount = 4;
+}
+
+message AllProductMessage {
+    repeated ProductMessage Product = 1;
+}
+
+message ProductRequest {
+    int64 Id = 1;
+}
+
+message AllProductRequest {
+}
