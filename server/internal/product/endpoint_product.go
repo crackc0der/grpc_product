@@ -4,9 +4,9 @@ import (
 	"context"
 	"log/slog"
 
-	"google.golang.org/protobuf/types/known/emptypb"
-
 	product_grpc "server/api/note_v1"
+
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type Endpoint struct {

@@ -6,16 +6,16 @@ import (
 	"net"
 	"os"
 
-	"server/config"
-	"server/internal/product"
+	_ "github.com/jackc/pgx/v5/stdlib"
+	"github.com/jmoiron/sqlx"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	_ "github.com/jackc/pgx/v5/stdlib"
-	"github.com/jmoiron/sqlx"
-
 	product_grpc "server/api/note_v1"
+
+	"server/config"
+	"server/internal/product"
 )
 
 func Run() {

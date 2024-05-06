@@ -33,7 +33,7 @@ func (r *Repository) SelectAllProducts(_ context.Context) (*product_grpc.AllProd
 }
 
 func (r *Repository) SelectProductByID(_ context.Context, id *product_grpc.ProductRequest) (*product_grpc.ProductMessage, error) {
-	query := "SELECT * FROM products WHERE id=:id"
+	query := "SELECT * FROM products WHERE id=$1"
 
 	var product *product_grpc.ProductMessage
 

@@ -4,10 +4,10 @@ create table if not exists category (
 );
 
 create table if not exists product (
-    id serial primary key,
-    productName varchar(255) not null,
-    productCategory int,
-    productPrice float not null,
+    product_id serial primary key,
+    product_name varchar(255) not null,
+    product_category int,
+    product_price float not null,
     foreign key (productCategory) references category (id) on delete cascade
 );
 

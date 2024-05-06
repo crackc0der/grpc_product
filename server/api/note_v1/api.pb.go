@@ -27,10 +27,10 @@ type ProductMessage struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id              int64            `protobuf:"varint,1,opt,name=Id,proto3" json:"Id,omitempty" db:"id"`
-	ProductName     string           `protobuf:"bytes,2,opt,name=ProductName,proto3" json:"ProductName,omitempty" db:"productName"`
-	ProductCategory *CategoryMessage `protobuf:"bytes,3,opt,name=ProductCategory,proto3" json:"ProductCategory,omitempty" db:"productCategory"`
-	ProductPrice    int64            `protobuf:"varint,4,opt,name=ProductPrice,proto3" json:"ProductPrice,omitempty" db:"productPrice"`
+	Id              int64            `protobuf:"varint,1,opt,name=Id,proto3" json:"Id,omitempty" db:"product_id"`
+	ProductName     string           `protobuf:"bytes,2,opt,name=ProductName,proto3" json:"ProductName,omitempty" db:"product_name"`
+	ProductCategory *CategoryMessage `protobuf:"bytes,3,opt,name=ProductCategory,proto3" json:"ProductCategory,omitempty" db:"product_category"`
+	ProductPrice    int64            `protobuf:"varint,4,opt,name=ProductPrice,proto3" json:"ProductPrice,omitempty" db:"product_price"`
 }
 
 func (x *ProductMessage) Reset() {
