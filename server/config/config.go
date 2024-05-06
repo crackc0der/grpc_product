@@ -27,7 +27,9 @@ type Config struct {
 
 func NewConfig() (*Config, error) {
 	var config Config
+
 	pathToYamlFile := "../../config/config.yaml"
+
 	configFile, err := os.Open(pathToYamlFile)
 	if err != nil {
 		return nil, fmt.Errorf("error decode config file: %w", err)
@@ -41,7 +43,6 @@ func NewConfig() (*Config, error) {
 	}
 
 	err = yaml.Unmarshal(configBytes, &config)
-
 	if err != nil {
 		return nil, fmt.Errorf("error unmarshal yaml config: %w", err)
 	}

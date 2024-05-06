@@ -7,6 +7,15 @@ option go_package = "github.com/crackc0der/test_grpc";
 service Product {
     rpc GetProduct(ProductRequest) returns (ProductMessage);
     rpc GetAllProducts(AllProductRequest) returns (AllProductMessage);
+    rpc AddProduct(ProductMessage) returns (ProductMessage);
+    rpc UpdateProduct(ProductMessage) returns (ProductMessage);
+    rpc DeleteProduct(ProductRequest) returns (ProductMessage);
+
+    rpc GetCategory(CategoryRequest) returns (CategoryMessage);
+    rpc GetAllCategories(AllCategoryRequest) returns (AllCategoryMessage);
+    rpc AddCategory(CategoryMessage) returns (CategoryMessage);
+    rpc UpdateCategory(CategoryMessage) returns (CategoryMessage);
+    rpc DeleteCategory(CategoryRequest) returns (CategoryMessage);
 }
 
 message ProductMessage {
@@ -17,7 +26,7 @@ message ProductMessage {
 }
 
 message AllProductMessage {
-    repeated ProductMessage Product = 1;
+    repeated ProductMessage Products = 1;
 }
 
 message ProductRequest {
@@ -25,4 +34,20 @@ message ProductRequest {
 }
 
 message AllProductRequest {
+}
+
+message CategoryMessage {
+    int64 Id = 1;
+    string CategoryName = 2;
+}
+
+message CategoryRequest {
+    int64 Id = 1;
+}
+
+message AllCategoryRequest {
+}
+
+message AllCategoryMessage {
+    repeated CategoryMessage Categories = 1;
 }

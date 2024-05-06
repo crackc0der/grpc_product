@@ -11,6 +11,7 @@ linters:
     - interfacer
     - nosnakecase
     - varcheck
+    - depguard
 
 linters-settings:
   depguard:
