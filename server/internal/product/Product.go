@@ -1,13 +1,13 @@
 package product
 
 type Category struct {
-	Id           int
-	CategoryName string
+	ID           int    `db:"id"`
+	CategoryName string `db:"categoryName"`
 }
 
 type Product struct {
-	Id              int
-	ProductName     string
-	ProductCategory int
-	Price           float32
+	ID              int      `db:"id"`
+	ProductName     string   `db:"productName"`
+	ProductCategory Category `db:"categoryName"`
+	Price           float32  `db:"price"`
 }

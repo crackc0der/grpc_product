@@ -1,0 +1,18 @@
+linters:
+  enable-all: false
+  disable:
+    - structcheck
+    - ifshort
+    - scopelint
+    - deadcode
+    - maligned
+    - exhaustivestruct
+    - golint
+    - interfacer
+    - nosnakecase
+    - varcheck
+
+linters-settings:
+  depguard:
+    exclude:
+      - github.com/jmoiron/sqlx

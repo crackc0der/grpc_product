@@ -10,3 +10,4 @@ create table if not exists product (
     price float not null,
     foreign key (productCategory) references category (id) on delete cascade
 );
+
