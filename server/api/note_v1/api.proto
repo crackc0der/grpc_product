@@ -1,28 +1,32 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
+
 package server;
 
-option go_package = "github.com/crackc0der/test_grpc";
+option go_package = "github.com/crackc0der/product_grpc";
 
 service Product {
     rpc GetProduct(ProductRequest) returns (ProductMessage);
-    rpc GetAllProducts(AllProductRequest) returns (AllProductMessage);
+    rpc GetAllProducts(google.protobuf.Empty) returns (AllProductMessage);
     rpc AddProduct(ProductMessage) returns (ProductMessage);
     rpc UpdateProduct(ProductMessage) returns (ProductMessage);
-    rpc DeleteProduct(ProductRequest) returns (ProductMessage);
+    rpc DeleteProduct(ProductRequest) returns (ProductResponse);
+}
 
+service Category {
     rpc GetCategory(CategoryRequest) returns (CategoryMessage);
-    rpc GetAllCategories(AllCategoryRequest) returns (AllCategoryMessage);
+    rpc GetAllCategories(google.protobuf.Empty) returns (AllCategoryMessage);
     rpc AddCategory(CategoryMessage) returns (CategoryMessage);
     rpc UpdateCategory(CategoryMessage) returns (CategoryMessage);
-    rpc DeleteCategory(CategoryRequest) returns (CategoryMessage);
+    rpc DeleteCategory(CategoryRequest) returns (CategoryResponse);
 }
 
 message ProductMessage {
     int64 Id = 1;
     string ProductName = 2;
-    float ProductPrice = 3;
-    int64 ProductCount = 4;
+    CategoryMessage ProductCategory = 3;
+    int64 ProductPrice = 4;
 }
 
 message AllProductMessage {
@@ -33,7 +37,8 @@ message ProductRequest {
     int64 Id = 1;
 }
 
-message AllProductRequest {
+message ProductResponse {
+    bool Deleted = 1;
 }
 
 message CategoryMessage {
@@ -45,9 +50,10 @@ message CategoryRequest {
     int64 Id = 1;
 }
 
-message AllCategoryRequest {
-}
-
 message AllCategoryMessage {
     repeated CategoryMessage Categories = 1;
+}
+
+message CategoryResponse {
+    bool Deleted = 1;
 }

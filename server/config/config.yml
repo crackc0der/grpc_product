@@ -4,6 +4,7 @@ dataBase:
   dbName: "shop"
   dbUser: "postgres"
   dbPassword: "7777777"
+  dbType: "pgx"
 
 host:
-  hostPort: ":8080"
+  hostPort: ":50051"

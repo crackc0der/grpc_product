@@ -12,8 +12,6 @@ linters:
     - nosnakecase
     - varcheck
     - depguard
+    - lll
 
-linters-settings:
-  depguard:
-    exclude:
-      - github.com/jmoiron/sqlx
+

@@ -14,6 +14,7 @@ type dataBase struct {
 	DBName     string `yaml:"dbName"`
 	DBUser     string `yaml:"dbUser"`
 	DBPassword string `yaml:"dbPassword"`
+	DBType     string `yaml:"dbType"`
 }
 
 type host struct {
@@ -28,7 +29,7 @@ type Config struct {
 func NewConfig() (*Config, error) {
 	var config Config
 
-	pathToYamlFile := "../../config/config.yaml"
+	pathToYamlFile := "config/config.yml"
 
 	configFile, err := os.Open(pathToYamlFile)
 	if err != nil {
