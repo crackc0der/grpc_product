@@ -20,11 +20,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Product_GetProduct_FullMethodName     = "/server.Product/GetProduct"
-	Product_GetAllProducts_FullMethodName = "/server.Product/GetAllProducts"
-	Product_AddProduct_FullMethodName     = "/server.Product/AddProduct"
-	Product_UpdateProduct_FullMethodName  = "/server.Product/UpdateProduct"
-	Product_DeleteProduct_FullMethodName  = "/server.Product/DeleteProduct"
+	Product_GetProduct_FullMethodName    = "/server.Product/GetProduct"
+	Product_GetProducts_FullMethodName   = "/server.Product/GetProducts"
+	Product_AddProduct_FullMethodName    = "/server.Product/AddProduct"
+	Product_UpdateProduct_FullMethodName = "/server.Product/UpdateProduct"
+	Product_DeleteProduct_FullMethodName = "/server.Product/DeleteProduct"
 )
 
 // ProductClient is the client API for Product service.
@@ -32,7 +32,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProductClient interface {
 	GetProduct(ctx context.Context, in *ProductRequest, opts ...grpc.CallOption) (*ProductMessage, error)
-	GetAllProducts(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*AllProductMessage, error)
+	GetProducts(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*AllProductMessage, error)
 	AddProduct(ctx context.Context, in *ProductMessage, opts ...grpc.CallOption) (*ProductMessage, error)
 	UpdateProduct(ctx context.Context, in *ProductMessage, opts ...grpc.CallOption) (*ProductMessage, error)
 	DeleteProduct(ctx context.Context, in *ProductRequest, opts ...grpc.CallOption) (*ProductResponse, error)
@@ -55,9 +55,9 @@ func (c *productClient) GetProduct(ctx context.Context, in *ProductRequest, opts
 	return out, nil
 }
 
-func (c *productClient) GetAllProducts(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*AllProductMessage, error) {
+func (c *productClient) GetProducts(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*AllProductMessage, error) {
 	out := new(AllProductMessage)
-	err := c.cc.Invoke(ctx, Product_GetAllProducts_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, Product_GetProducts_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +96,7 @@ func (c *productClient) DeleteProduct(ctx context.Context, in *ProductRequest, o
 // for forward compatibility
 type ProductServer interface {
 	GetProduct(context.Context, *ProductRequest) (*ProductMessage, error)
-	GetAllProducts(context.Context, *emptypb.Empty) (*AllProductMessage, error)
+	GetProducts(context.Context, *emptypb.Empty) (*AllProductMessage, error)
 	AddProduct(context.Context, *ProductMessage) (*ProductMessage, error)
 	UpdateProduct(context.Context, *ProductMessage) (*ProductMessage, error)
 	DeleteProduct(context.Context, *ProductRequest) (*ProductResponse, error)
@@ -110,8 +110,8 @@ type UnimplementedProductServer struct {
 func (UnimplementedProductServer) GetProduct(context.Context, *ProductRequest) (*ProductMessage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProduct not implemented")
 }
-func (UnimplementedProductServer) GetAllProducts(context.Context, *emptypb.Empty) (*AllProductMessage, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetAllProducts not implemented")
+func (UnimplementedProductServer) GetProducts(context.Context, *emptypb.Empty) (*AllProductMessage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProducts not implemented")
 }
 func (UnimplementedProductServer) AddProduct(context.Context, *ProductMessage) (*ProductMessage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddProduct not implemented")
@@ -153,20 +153,20 @@ func _Product_GetProduct_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Product_GetAllProducts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Product_GetProducts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ProductServer).GetAllProducts(ctx, in)
+		return srv.(ProductServer).GetProducts(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Product_GetAllProducts_FullMethodName,
+		FullMethod: Product_GetProducts_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProductServer).GetAllProducts(ctx, req.(*emptypb.Empty))
+		return srv.(ProductServer).GetProducts(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -237,8 +237,8 @@ var Product_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Product_GetProduct_Handler,
 		},
 		{
-			MethodName: "GetAllProducts",
-			Handler:    _Product_GetAllProducts_Handler,
+			MethodName: "GetProducts",
+			Handler:    _Product_GetProducts_Handler,
 		},
 		{
 			MethodName: "AddProduct",
@@ -258,11 +258,11 @@ var Product_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	Category_GetCategory_FullMethodName      = "/server.Category/GetCategory"
-	Category_GetAllCategories_FullMethodName = "/server.Category/GetAllCategories"
-	Category_AddCategory_FullMethodName      = "/server.Category/AddCategory"
-	Category_UpdateCategory_FullMethodName   = "/server.Category/UpdateCategory"
-	Category_DeleteCategory_FullMethodName   = "/server.Category/DeleteCategory"
+	Category_GetCategory_FullMethodName    = "/server.Category/GetCategory"
+	Category_GetCategories_FullMethodName  = "/server.Category/GetCategories"
+	Category_AddCategory_FullMethodName    = "/server.Category/AddCategory"
+	Category_UpdateCategory_FullMethodName = "/server.Category/UpdateCategory"
+	Category_DeleteCategory_FullMethodName = "/server.Category/DeleteCategory"
 )
 
 // CategoryClient is the client API for Category service.
@@ -270,7 +270,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CategoryClient interface {
 	GetCategory(ctx context.Context, in *CategoryRequest, opts ...grpc.CallOption) (*CategoryMessage, error)
-	GetAllCategories(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*AllCategoryMessage, error)
+	GetCategories(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*AllCategoryMessage, error)
 	AddCategory(ctx context.Context, in *CategoryMessage, opts ...grpc.CallOption) (*CategoryMessage, error)
 	UpdateCategory(ctx context.Context, in *CategoryMessage, opts ...grpc.CallOption) (*CategoryMessage, error)
 	DeleteCategory(ctx context.Context, in *CategoryRequest, opts ...grpc.CallOption) (*CategoryResponse, error)
@@ -293,9 +293,9 @@ func (c *categoryClient) GetCategory(ctx context.Context, in *CategoryRequest, o
 	return out, nil
 }
 
-func (c *categoryClient) GetAllCategories(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*AllCategoryMessage, error) {
+func (c *categoryClient) GetCategories(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*AllCategoryMessage, error) {
 	out := new(AllCategoryMessage)
-	err := c.cc.Invoke(ctx, Category_GetAllCategories_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, Category_GetCategories_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -334,7 +334,7 @@ func (c *categoryClient) DeleteCategory(ctx context.Context, in *CategoryRequest
 // for forward compatibility
 type CategoryServer interface {
 	GetCategory(context.Context, *CategoryRequest) (*CategoryMessage, error)
-	GetAllCategories(context.Context, *emptypb.Empty) (*AllCategoryMessage, error)
+	GetCategories(context.Context, *emptypb.Empty) (*AllCategoryMessage, error)
 	AddCategory(context.Context, *CategoryMessage) (*CategoryMessage, error)
 	UpdateCategory(context.Context, *CategoryMessage) (*CategoryMessage, error)
 	DeleteCategory(context.Context, *CategoryRequest) (*CategoryResponse, error)
@@ -348,8 +348,8 @@ type UnimplementedCategoryServer struct {
 func (UnimplementedCategoryServer) GetCategory(context.Context, *CategoryRequest) (*CategoryMessage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCategory not implemented")
 }
-func (UnimplementedCategoryServer) GetAllCategories(context.Context, *emptypb.Empty) (*AllCategoryMessage, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetAllCategories not implemented")
+func (UnimplementedCategoryServer) GetCategories(context.Context, *emptypb.Empty) (*AllCategoryMessage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCategories not implemented")
 }
 func (UnimplementedCategoryServer) AddCategory(context.Context, *CategoryMessage) (*CategoryMessage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddCategory not implemented")
@@ -391,20 +391,20 @@ func _Category_GetCategory_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Category_GetAllCategories_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Category_GetCategories_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CategoryServer).GetAllCategories(ctx, in)
+		return srv.(CategoryServer).GetCategories(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Category_GetAllCategories_FullMethodName,
+		FullMethod: Category_GetCategories_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CategoryServer).GetAllCategories(ctx, req.(*emptypb.Empty))
+		return srv.(CategoryServer).GetCategories(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -475,8 +475,8 @@ var Category_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Category_GetCategory_Handler,
 		},
 		{
-			MethodName: "GetAllCategories",
-			Handler:    _Category_GetAllCategories_Handler,
+			MethodName: "GetCategories",
+			Handler:    _Category_GetCategories_Handler,
 		},
 		{
 			MethodName: "AddCategory",

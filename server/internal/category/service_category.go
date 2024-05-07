@@ -15,7 +15,7 @@ func NewServiceCategory(repository *RepositoryCategory) *ServiceCategory {
 }
 
 func (r *ServiceCategory) GetCategories(ctx context.Context) (*product_grpc.AllCategoryMessage, error) {
-	categories, err := r.repository.SelectAllCategories(ctx)
+	categories, err := r.repository.SelectCategories(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("error in service's method GetCategories: %w", err)
 	}

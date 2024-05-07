@@ -20,12 +20,11 @@ func NewEndpointCategory(service *ServiceCategory, log *slog.Logger) *EndpointCa
 	return &EndpointCategory{service: service, log: log}
 }
 
-func (e *EndpointCategory) GetAllCategories(ctx context.Context, _ *emptypb.Empty) (*product_grpc.AllCategoryMessage, error) {
+func (e *EndpointCategory) GetCategories(ctx context.Context, _ *emptypb.Empty) (*product_grpc.AllCategoryMessage, error) {
 	categories, err := e.service.GetCategories(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("error in endpoint's method GetAllCategories: %w", err)
 	}
-
 	return categories, nil
 }
 

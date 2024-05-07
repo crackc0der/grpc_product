@@ -8,7 +8,7 @@ option go_package = "github.com/crackc0der/product_grpc";
 
 service Product {
     rpc GetProduct(ProductRequest) returns (ProductMessage);
-    rpc GetAllProducts(google.protobuf.Empty) returns (AllProductMessage);
+    rpc GetProducts(google.protobuf.Empty) returns (AllProductMessage);
     rpc AddProduct(ProductMessage) returns (ProductMessage);
     rpc UpdateProduct(ProductMessage) returns (ProductMessage);
     rpc DeleteProduct(ProductRequest) returns (ProductResponse);
@@ -16,7 +16,7 @@ service Product {
 
 service Category {
     rpc GetCategory(CategoryRequest) returns (CategoryMessage);
-    rpc GetAllCategories(google.protobuf.Empty) returns (AllCategoryMessage);
+    rpc GetCategories(google.protobuf.Empty) returns (AllCategoryMessage);
     rpc AddCategory(CategoryMessage) returns (CategoryMessage);
     rpc UpdateCategory(CategoryMessage) returns (CategoryMessage);
     rpc DeleteCategory(CategoryRequest) returns (CategoryResponse);
