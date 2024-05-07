@@ -19,24 +19,12 @@ func NewRepositoryCategory(db *sqlx.DB) *RepositoryCategory {
 
 func (r *RepositoryCategory) SelectCategories(_ context.Context) (*product_grpc.AllCategoryMessage, error) {
 	query := "SELECT * FROM category"
-	rows, err := r.db.Queryx(query)
-	if err != nil {
-		return nil, fmt.Errorf("error in repository's method SelectAllCategories: %w", err)
-	}
-	defer rows.Close()
 
 	var categories []*product_grpc.CategoryMessage
-	for rows.Next() {
-		var category product_grpc.CategoryMessage
-		if err := rows.StructScan(&category); err != nil {
-			return nil, fmt.Errorf("error scanning row into CategoryMessage: %w", err)
-		}
 
-		categories = append(categories, &category)
-	}
-
-	if err := rows.Err(); err != nil {
-		return nil, fmt.Errorf("error iterating over rows: %w", err)
+	err := r.db.Select(&categories, query)
+	if err != nil {
+		return nil, fmt.Errorf("error in repository's method SelectCategories: %w", err)
 	}
 
 	allCategories := &product_grpc.AllCategoryMessage{
