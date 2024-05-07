@@ -15,11 +15,11 @@ type Endpoint struct {
 	product_grpc.UnimplementedProductServer
 }
 
-func NewEndpoint(service *Service, log *slog.Logger) *Endpoint {
+func NewEndpointProduct(service *Service, log *slog.Logger) *Endpoint {
 	return &Endpoint{service: service, log: log}
 }
 
-func (e *Endpoint) GetAllProducts(ctx context.Context, _ *emptypb.Empty) (*product_grpc.AllProductMessage, error) {
+func (e *Endpoint) GetProducts(ctx context.Context, _ *emptypb.Empty) (*product_grpc.AllProductMessage, error) {
 	products, err := e.service.GetProducts(ctx)
 	if err != nil {
 		e.log.Error("error in Endpoint's method GetProducts: " + err.Error())

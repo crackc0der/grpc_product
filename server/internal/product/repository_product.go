@@ -11,29 +11,29 @@ import (
 	product_grpc "server/api/note_v1"
 )
 
-type Repository struct {
+type RepositoryProduct struct {
 	db *sqlx.DB
 }
 
-func NewRepository(db *sqlx.DB) (*Repository, error) {
-	return &Repository{db: db}, nil
+func NewRepositoryProduct(db *sqlx.DB) *RepositoryProduct {
+	return &RepositoryProduct{db: db}
 }
 
-func (r *Repository) SelectAllProducts(_ context.Context) (*product_grpc.AllProductMessage, error) {
+func (r *RepositoryProduct) SelectProducts(_ context.Context) (*product_grpc.AllProductMessage, error) {
 	query := "SELECT * FROM product"
 
 	var products *product_grpc.AllProductMessage
 
 	err := r.db.Select(products.GetProducts, query)
 	if err != nil {
-		return nil, fmt.Errorf("error selecting products in repository's method SelectAllProducts: %w", err)
+		return nil, fmt.Errorf("error selecting product in repository's method SelectAllProducts: %w", err)
 	}
 
 	return products, nil
 }
 
-func (r *Repository) SelectProductByID(_ context.Context, id *product_grpc.ProductRequest) (*product_grpc.ProductMessage, error) {
-	query := "SELECT * FROM products WHERE id=$1"
+func (r *RepositoryProduct) SelectProductByID(_ context.Context, id *product_grpc.ProductRequest) (*product_grpc.ProductMessage, error) {
+	query := "SELECT * FROM product WHERE product_id=$1"
 
 	var product *product_grpc.ProductMessage
 
@@ -47,8 +47,8 @@ func (r *Repository) SelectProductByID(_ context.Context, id *product_grpc.Produ
 	return product, nil
 }
 
-func (r *Repository) InsertProduct(_ context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
-	query := `INSERT INTO product (productName, productCategory, productPrice) VALUES(:ProductName,:ProductCategory,:ProductPrice)`
+func (r *RepositoryProduct) InsertProduct(_ context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
+	query := `INSERT INTO product (product_name, product_category, product_price) VALUES(:ProductName,:ProductCategory,:ProductPrice)`
 
 	_, err := r.db.NamedExec(query, prod)
 	if err != nil {
@@ -58,8 +58,8 @@ func (r *Repository) InsertProduct(_ context.Context, prod *product_grpc.Product
 	return prod, nil
 }
 
-func (r *Repository) DeleteProductByID(_ context.Context, productID *product_grpc.ProductRequest) (*product_grpc.ProductResponse, error) {
-	query := "DELETE * FROM product WHERE id=:id"
+func (r *RepositoryProduct) DeleteProductByID(_ context.Context, productID *product_grpc.ProductRequest) (*product_grpc.ProductResponse, error) {
+	query := "DELETE * FROM product WHERE product_id=:id"
 
 	prodID := strconv.FormatInt(productID.GetId(), 10)
 
@@ -71,8 +71,8 @@ func (r *Repository) DeleteProductByID(_ context.Context, productID *product_grp
 	return &product_grpc.ProductResponse{Deleted: true}, nil
 }
 
-func (r *Repository) UpdateProduct(_ context.Context, product *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
-	query := `UPDATE product SET id=:Id productName=:ProductName productCategory=:ProductCategory productPrice=:Price 
+func (r *RepositoryProduct) UpdateProduct(_ context.Context, product *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
+	query := `UPDATE product SET product_id=:Id product_name=:Product_name product_category=:ProductCategory productPrice=:Price 
 			RETURNING id, ProductName, ProductCategory, Price`
 
 	var updatedProduct *product_grpc.ProductMessage

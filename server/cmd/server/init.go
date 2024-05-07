@@ -15,6 +15,7 @@ import (
 	product_grpc "server/api/note_v1"
 
 	"server/config"
+	"server/internal/category"
 	"server/internal/product"
 )
 
@@ -33,13 +34,13 @@ func Run() {
 		log.Fatal(err)
 	}
 
-	productRepository, err := product.NewRepository(dbConn)
-	if err != nil {
-		log.Fatal(err)
-	}
+	productRepository := product.NewRepositoryProduct(dbConn)
+	productService := product.NewServiceProduct(productRepository)
+	productEndpoint := product.NewEndpointProduct(productService, logger)
 
-	productService := product.NewService(productRepository)
-	productEndpoint := product.NewEndpoint(productService, logger)
+	categoryRepository := category.NewRepositoryCategory(dbConn)
+	categoryService := category.NewServiceCategory(categoryRepository)
+	categoryEndpoint := category.NewEndpointCategory(categoryService, logger)
 
 	conn, err := net.Listen("tcp", config.Host.HostPort)
 	if err != nil {
@@ -50,6 +51,7 @@ func Run() {
 
 	reflection.Register(serv)
 	product_grpc.RegisterProductServer(serv, productEndpoint)
+	product_grpc.RegisterCategoryServer(serv, categoryEndpoint)
 
 	if err := serv.Serve(conn); err != nil {
 		log.Fatal(err)

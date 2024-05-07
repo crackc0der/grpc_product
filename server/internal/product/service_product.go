@@ -8,15 +8,15 @@ import (
 )
 
 type Service struct {
-	repository *Repository
+	repository *RepositoryProduct
 }
 
-func NewService(repository *Repository) *Service {
+func NewServiceProduct(repository *RepositoryProduct) *Service {
 	return &Service{repository: repository}
 }
 
 func (s *Service) GetProducts(ctx context.Context) (*product_grpc.AllProductMessage, error) {
-	products, err := s.repository.SelectAllProducts(ctx)
+	products, err := s.repository.SelectProducts(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("error getting products in service's method GetProducts: %w", err)
 	}
