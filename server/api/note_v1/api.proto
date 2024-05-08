@@ -15,7 +15,6 @@ service Product {
 }
 
 service Category {
-    rpc GetCategory(CategoryRequest) returns (CategoryMessage);
     rpc GetCategories(google.protobuf.Empty) returns (AllCategoryMessage);
     rpc AddCategory(CategoryMessage) returns (CategoryMessage);
     rpc UpdateCategory(CategoryMessage) returns (CategoryMessage);

@@ -3,7 +3,6 @@ package product
 import (
 	"context"
 	"fmt"
-	"strconv"
 
 	_ "github.com/jackc/pgx/v5"
 	"github.com/jmoiron/sqlx"
@@ -66,9 +65,7 @@ func (r *RepositoryProduct) InsertProduct(_ context.Context, prod *product_grpc.
 func (r *RepositoryProduct) DeleteProductByID(_ context.Context, productID *product_grpc.ProductRequest) (*product_grpc.ProductResponse, error) {
 	query := "DELETE FROM product WHERE product_id=$1"
 
-	prodID := strconv.FormatInt(productID.GetId(), 10)
-
-	_, err := r.db.Exec(query, prodID)
+	_, err := r.db.Exec(query, productID.GetId())
 	if err != nil {
 		return nil, fmt.Errorf("error deleting product in repository's mothod DeleteProductById: %w", err)
 	}

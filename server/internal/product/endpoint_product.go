@@ -2,6 +2,7 @@ package product
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 
 	product_grpc "server/api/note_v1"
@@ -41,8 +42,8 @@ func (e *Endpoint) GetProduct(ctx context.Context, id *product_grpc.ProductReque
 	return product, nil
 }
 
-func (e *Endpoint) AddProduct(ctx context.Context, product *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
-	product, err := e.service.AddProduct(ctx, product)
+func (e *Endpoint) AddProduct(ctx context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
+	product, err := e.service.AddProduct(ctx, prod)
 	if err != nil {
 		e.log.Error("error in Endpoint's method AddProduct: " + err.Error())
 
@@ -63,13 +64,14 @@ func (e *Endpoint) DeleteProduct(ctx context.Context, id *product_grpc.ProductRe
 	return &product_grpc.ProductResponse{Deleted: res.GetDeleted()}, nil
 }
 
-func (e *Endpoint) UpdateProduct(ctx context.Context, product *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
-	prod, err := e.service.UpdateProduct(ctx, product)
+func (e *Endpoint) UpdateProduct(ctx context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
+	fmt.Println(prod)
+	product, err := e.service.UpdateProduct(ctx, prod)
 	if err != nil {
 		e.log.Error("error in Endpoint's method UpdateProduct: " + err.Error())
 
 		return nil, err
 	}
 
-	return prod, nil
+	return product, nil
 }

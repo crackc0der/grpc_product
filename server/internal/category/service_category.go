@@ -14,8 +14,8 @@ func NewServiceCategory(repository *RepositoryCategory) *ServiceCategory {
 	return &ServiceCategory{repository: repository}
 }
 
-func (r *ServiceCategory) GetCategories(ctx context.Context) (*product_grpc.AllCategoryMessage, error) {
-	categories, err := r.repository.SelectCategories(ctx)
+func (s *ServiceCategory) GetCategories(ctx context.Context) (*product_grpc.AllCategoryMessage, error) {
+	categories, err := s.repository.SelectCategories(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("error in service's method GetCategories: %w", err)
 	}
@@ -23,11 +23,29 @@ func (r *ServiceCategory) GetCategories(ctx context.Context) (*product_grpc.AllC
 	return categories, nil
 }
 
-func (r *ServiceCategory) AddCategory(ctx context.Context, category *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error) {
-	category, err := r.repository.InsertCategory(ctx, category)
+func (s *ServiceCategory) AddCategory(ctx context.Context, cat *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error) {
+	category, err := s.repository.InsertCategory(ctx, cat)
 	if err != nil {
 		return nil, fmt.Errorf("error in service's method AddCategory: %w", err)
 	}
 
 	return category, nil
+}
+
+func (s *ServiceCategory) UpdateCategory(ctx context.Context, cat *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error) {
+	category, err := s.repository.UpdateCategory(ctx, cat)
+	if err != nil {
+		return nil, fmt.Errorf("error in service's method UpdateCategory: %w", err)
+	}
+
+	return category, nil
+}
+
+func (s *ServiceCategory) DeleteCategory(ctx context.Context, id *product_grpc.CategoryRequest) (*product_grpc.CategoryResponse, error) {
+	result, err := s.repository.DeleteCategory(ctx, id)
+	if err != nil {
+		return nil, fmt.Errorf("error in service's method DeleteCategory: %w", err)
+	}
+
+	return result, nil
 }

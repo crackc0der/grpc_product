@@ -36,3 +36,25 @@ func (e *EndpointCategory) AddCategory(ctx context.Context, category *product_gr
 
 	return category, nil
 }
+
+func (e *EndpointCategory) UpdateCategory(ctx context.Context, cat *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error) {
+	category, err := e.service.UpdateCategory(ctx, cat)
+	if err != nil {
+		e.log.Error("error in Endpoint's method UpdateCategory: " + err.Error())
+
+		return nil, fmt.Errorf("error in service's method UpdateCategory: %w", err)
+	}
+
+	return category, nil
+}
+
+func (e *EndpointCategory) DeleteCategory(ctx context.Context, id *product_grpc.CategoryRequest) (*product_grpc.CategoryResponse, error) {
+	result, err := e.service.DeleteCategory(ctx, id)
+	if err != nil {
+		e.log.Error("error in Endpoint's method DeleteCategory: " + err.Error())
+
+		return nil, fmt.Errorf("error in service's method DeleteCategory: %w", err)
+	}
+
+	return result, nil
+}

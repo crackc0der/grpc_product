@@ -33,8 +33,8 @@ func (s *Service) GetProduct(ctx context.Context, id *product_grpc.ProductReques
 	return product, nil
 }
 
-func (s *Service) AddProduct(ctx context.Context, product *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
-	product, err := s.repository.InsertProduct(ctx, product)
+func (s *Service) AddProduct(ctx context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
+	product, err := s.repository.InsertProduct(ctx, prod)
 	if err != nil {
 		return nil, fmt.Errorf("error adding product in service's method AddProduct: %w", err)
 	}
