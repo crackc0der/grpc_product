@@ -21,3 +21,6 @@ lint-server:
 
 lint-client:
 	cd client && make lint
+
+gen-grpc-server:
+	protoc --proto_path server/api/note_v1 --go_out=server/api/note_v1 --go_opt=paths=source_relative --go-grpc_out=server/api/note_v1 --go-grpc_opt=paths=source_relative server/api/note_v1/api.proto

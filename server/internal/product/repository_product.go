@@ -22,24 +22,26 @@ func NewRepositoryProduct(db *sqlx.DB) *RepositoryProduct {
 func (r *RepositoryProduct) SelectProducts(_ context.Context) (*product_grpc.AllProductMessage, error) {
 	query := "SELECT * FROM product"
 
-	var products *product_grpc.AllProductMessage
+	var products []*product_grpc.ProductMessage
 
-	err := r.db.Select(products.GetProducts, query)
+	err := r.db.Select(&products, query)
 	if err != nil {
 		return nil, fmt.Errorf("error selecting product in repository's method SelectAllProducts: %w", err)
 	}
 
-	return products, nil
+	allProducts := &product_grpc.AllProductMessage{
+		Products: products,
+	}
+
+	return allProducts, nil
 }
 
 func (r *RepositoryProduct) SelectProductByID(_ context.Context, id *product_grpc.ProductRequest) (*product_grpc.ProductMessage, error) {
 	query := "SELECT * FROM product WHERE product_id=$1"
 
-	var product *product_grpc.ProductMessage
-
-	res := strconv.FormatInt(id.GetId(), 10)
-
-	err := r.db.Get(product, query, res)
+	product := &product_grpc.ProductMessage{}
+	fmt.Println(id.GetId())
+	err := r.db.Get(product, query, id.GetId())
 	if err != nil {
 		return nil, fmt.Errorf("error selecting product in repository's method SelectProductById: %w", err)
 	}
@@ -48,18 +50,21 @@ func (r *RepositoryProduct) SelectProductByID(_ context.Context, id *product_grp
 }
 
 func (r *RepositoryProduct) InsertProduct(_ context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
-	query := `INSERT INTO product (product_name, product_category, product_price) VALUES(:ProductName,:ProductCategory,:ProductPrice)`
+	query := `INSERT INTO product (product_name, product_category_id, product_price) VALUES($1, $2, $3) 
+		RETURNING product_id, product_name, product_category_id, product_price`
 
-	_, err := r.db.NamedExec(query, prod)
+	product := &product_grpc.ProductMessage{}
+
+	err := r.db.QueryRowx(query, prod.ProductName, prod.ProductCategoryID, prod.ProductPrice).StructScan(product)
 	if err != nil {
 		return nil, fmt.Errorf("error inserting product in repository's method InsertProduct: %w", err)
 	}
 
-	return prod, nil
+	return product, nil
 }
 
 func (r *RepositoryProduct) DeleteProductByID(_ context.Context, productID *product_grpc.ProductRequest) (*product_grpc.ProductResponse, error) {
-	query := "DELETE * FROM product WHERE product_id=:id"
+	query := "DELETE FROM product WHERE product_id=$1"
 
 	prodID := strconv.FormatInt(productID.GetId(), 10)
 
@@ -72,12 +77,12 @@ func (r *RepositoryProduct) DeleteProductByID(_ context.Context, productID *prod
 }
 
 func (r *RepositoryProduct) UpdateProduct(_ context.Context, product *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
-	query := `UPDATE product SET product_id=:Id product_name=:Product_name product_category=:ProductCategory productPrice=:Price 
-			RETURNING id, ProductName, ProductCategory, Price`
+	query := `UPDATE product SET product_name=$1, product_category_id=$2, product_price=$3 WHERE product_id=$4
+			RETURNING product_id, product_name, product_category_id, product_price`
 
-	var updatedProduct *product_grpc.ProductMessage
+	updatedProduct := &product_grpc.ProductMessage{}
 
-	err := r.db.QueryRowx(query, product).StructScan(updatedProduct)
+	err := r.db.QueryRowx(query, product.ProductName, product.ProductCategoryID, product.ProductPrice, product.Id).StructScan(updatedProduct)
 	if err != nil {
 		return nil, fmt.Errorf("error updating product in repository's method UpdateProduct: %w", err)
 	}

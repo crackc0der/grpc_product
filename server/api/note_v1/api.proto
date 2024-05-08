@@ -25,8 +25,8 @@ service Category {
 message ProductMessage {
     int64 Id = 1;
     string ProductName = 2;
-    CategoryMessage ProductCategory = 3;
-    int64 ProductPrice = 4;
+    int64 ProductCategoryID = 3;
+    double ProductPrice = 4;
 }
 
 message AllProductMessage {

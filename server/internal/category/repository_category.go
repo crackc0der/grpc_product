@@ -34,9 +34,9 @@ func (r *RepositoryCategory) SelectCategories(_ context.Context) (*product_grpc.
 }
 
 func (r *RepositoryCategory) InsertCategory(_ context.Context, category *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error) {
-	query := "INSERT INTO category (category_id, category_name) VALUES ($1, $2)"
+	query := "INSERT INTO category (category_name) VALUES ($1)"
 	fmt.Println(category)
-	_, err := r.db.Exec(query, category.Id, category.CategoryName)
+	_, err := r.db.Exec(query, category.CategoryName)
 	if err != nil {
 		return nil, fmt.Errorf("error in repository's method InsertCategory: %w", err)
 	}
