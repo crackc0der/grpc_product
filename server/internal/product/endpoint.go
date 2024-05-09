@@ -16,14 +16,14 @@ type Endpoint struct {
 	product_grpc.UnimplementedProductServer
 }
 
-func NewEndpointProduct(service *Service, log *slog.Logger) *Endpoint {
+func NewEndpoint(service *Service, log *slog.Logger) *Endpoint {
 	return &Endpoint{service: service, log: log}
 }
 
 func (e *Endpoint) GetProducts(ctx context.Context, _ *emptypb.Empty) (*product_grpc.AllProductMessage, error) {
 	products, err := e.service.GetProducts(ctx)
 	if err != nil {
-		e.log.Error("error in Endpoint's method GetProducts: " + err.Error())
+		e.log.Error("error in endpoint.GetProducts: " + err.Error())
 
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func (e *Endpoint) GetProducts(ctx context.Context, _ *emptypb.Empty) (*product_
 func (e *Endpoint) GetProduct(ctx context.Context, id *product_grpc.ProductRequest) (*product_grpc.ProductMessage, error) {
 	product, err := e.service.GetProduct(ctx, id)
 	if err != nil {
-		e.log.Error("error in Endpoint's method GetProduct: " + err.Error())
+		e.log.Error("error in endpoint.GetProduct: " + err.Error())
 
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (e *Endpoint) GetProduct(ctx context.Context, id *product_grpc.ProductReque
 func (e *Endpoint) AddProduct(ctx context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
 	product, err := e.service.AddProduct(ctx, prod)
 	if err != nil {
-		e.log.Error("error in Endpoint's method AddProduct: " + err.Error())
+		e.log.Error("error in endpoint.AddProduct: " + err.Error())
 
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (e *Endpoint) AddProduct(ctx context.Context, prod *product_grpc.ProductMes
 func (e *Endpoint) DeleteProduct(ctx context.Context, id *product_grpc.ProductRequest) (*product_grpc.ProductResponse, error) {
 	res, err := e.service.DeleteProduct(ctx, id)
 	if err != nil {
-		e.log.Error("error in Endpoint's method DeleteProduct: " + err.Error())
+		e.log.Error("error in endpoint.DeleteProduct: " + err.Error())
 
 		return nil, err
 	}
@@ -68,7 +68,7 @@ func (e *Endpoint) UpdateProduct(ctx context.Context, prod *product_grpc.Product
 	fmt.Println(prod)
 	product, err := e.service.UpdateProduct(ctx, prod)
 	if err != nil {
-		e.log.Error("error in Endpoint's method UpdateProduct: " + err.Error())
+		e.log.Error("error in endpoint.UpdateProduct: " + err.Error())
 
 		return nil, err
 	}

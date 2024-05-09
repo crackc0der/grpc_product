@@ -6,15 +6,15 @@ import (
 	product_grpc "server/api/note_v1"
 )
 
-type ServiceCategory struct {
-	repository *RepositoryCategory
+type Service struct {
+	repository *Repository
 }
 
-func NewServiceCategory(repository *RepositoryCategory) *ServiceCategory {
-	return &ServiceCategory{repository: repository}
+func NewService(repository *Repository) *Service {
+	return &Service{repository: repository}
 }
 
-func (s *ServiceCategory) GetCategories(ctx context.Context) (*product_grpc.AllCategoryMessage, error) {
+func (s *Service) GetCategories(ctx context.Context) (*product_grpc.AllCategoryMessage, error) {
 	categories, err := s.repository.SelectCategories(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("error in service's method GetCategories: %w", err)
@@ -23,7 +23,7 @@ func (s *ServiceCategory) GetCategories(ctx context.Context) (*product_grpc.AllC
 	return categories, nil
 }
 
-func (s *ServiceCategory) AddCategory(ctx context.Context, cat *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error) {
+func (s *Service) AddCategory(ctx context.Context, cat *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error) {
 	category, err := s.repository.InsertCategory(ctx, cat)
 	if err != nil {
 		return nil, fmt.Errorf("error in service's method AddCategory: %w", err)
@@ -32,7 +32,7 @@ func (s *ServiceCategory) AddCategory(ctx context.Context, cat *product_grpc.Cat
 	return category, nil
 }
 
-func (s *ServiceCategory) UpdateCategory(ctx context.Context, cat *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error) {
+func (s *Service) UpdateCategory(ctx context.Context, cat *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error) {
 	category, err := s.repository.UpdateCategory(ctx, cat)
 	if err != nil {
 		return nil, fmt.Errorf("error in service's method UpdateCategory: %w", err)
@@ -41,7 +41,7 @@ func (s *ServiceCategory) UpdateCategory(ctx context.Context, cat *product_grpc.
 	return category, nil
 }
 
-func (s *ServiceCategory) DeleteCategory(ctx context.Context, id *product_grpc.CategoryRequest) (*product_grpc.CategoryResponse, error) {
+func (s *Service) DeleteCategory(ctx context.Context, id *product_grpc.CategoryRequest) (*product_grpc.CategoryResponse, error) {
 	result, err := s.repository.DeleteCategory(ctx, id)
 	if err != nil {
 		return nil, fmt.Errorf("error in service's method DeleteCategory: %w", err)

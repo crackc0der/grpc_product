@@ -10,17 +10,17 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-type EndpointCategory struct {
-	service *ServiceCategory
+type Endpoint struct {
+	service *Service
 	log     *slog.Logger
 	product_grpc.UnimplementedCategoryServer
 }
 
-func NewEndpointCategory(service *ServiceCategory, log *slog.Logger) *EndpointCategory {
-	return &EndpointCategory{service: service, log: log}
+func NewEndpoint(service *Service, log *slog.Logger) *Endpoint {
+	return &Endpoint{service: service, log: log}
 }
 
-func (e *EndpointCategory) GetCategories(ctx context.Context, _ *emptypb.Empty) (*product_grpc.AllCategoryMessage, error) {
+func (e *Endpoint) GetCategories(ctx context.Context, _ *emptypb.Empty) (*product_grpc.AllCategoryMessage, error) {
 	categories, err := e.service.GetCategories(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("error in endpoint's method GetCategories: %w", err)
@@ -28,7 +28,7 @@ func (e *EndpointCategory) GetCategories(ctx context.Context, _ *emptypb.Empty) 
 	return categories, nil
 }
 
-func (e *EndpointCategory) AddCategory(ctx context.Context, category *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error) {
+func (e *Endpoint) AddCategory(ctx context.Context, category *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error) {
 	category, err := e.service.AddCategory(ctx, category)
 	if err != nil {
 		return nil, fmt.Errorf("error in endpoint's method AddCategory: %w", err)
@@ -37,7 +37,7 @@ func (e *EndpointCategory) AddCategory(ctx context.Context, category *product_gr
 	return category, nil
 }
 
-func (e *EndpointCategory) UpdateCategory(ctx context.Context, cat *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error) {
+func (e *Endpoint) UpdateCategory(ctx context.Context, cat *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error) {
 	category, err := e.service.UpdateCategory(ctx, cat)
 	if err != nil {
 		e.log.Error("error in Endpoint's method UpdateCategory: " + err.Error())
@@ -48,7 +48,7 @@ func (e *EndpointCategory) UpdateCategory(ctx context.Context, cat *product_grpc
 	return category, nil
 }
 
-func (e *EndpointCategory) DeleteCategory(ctx context.Context, id *product_grpc.CategoryRequest) (*product_grpc.CategoryResponse, error) {
+func (e *Endpoint) DeleteCategory(ctx context.Context, id *product_grpc.CategoryRequest) (*product_grpc.CategoryResponse, error) {
 	result, err := e.service.DeleteCategory(ctx, id)
 	if err != nil {
 		e.log.Error("error in Endpoint's method DeleteCategory: " + err.Error())

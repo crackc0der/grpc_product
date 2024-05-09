@@ -34,13 +34,13 @@ func Run() {
 		log.Fatal(err)
 	}
 
-	productRepository := product.NewRepositoryProduct(dbConn)
-	productService := product.NewServiceProduct(productRepository)
-	productEndpoint := product.NewEndpointProduct(productService, logger)
+	productRepository := product.NewRepository(dbConn)
+	productService := product.NewService(productRepository)
+	productEndpoint := product.NewEndpoint(productService, logger)
 
-	categoryRepository := category.NewRepositoryCategory(dbConn)
-	categoryService := category.NewServiceCategory(categoryRepository)
-	categoryEndpoint := category.NewEndpointCategory(categoryService, logger)
+	categoryRepository := category.NewRepository(dbConn)
+	categoryService := category.NewService(categoryRepository)
+	categoryEndpoint := category.NewEndpoint(categoryService, logger)
 
 	conn, err := net.Listen("tcp", config.Host.HostPort)
 	if err != nil {

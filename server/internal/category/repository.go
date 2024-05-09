@@ -9,15 +9,15 @@ import (
 	product_grpc "server/api/note_v1"
 )
 
-type RepositoryCategory struct {
+type Repository struct {
 	db *sqlx.DB
 }
 
-func NewRepositoryCategory(db *sqlx.DB) *RepositoryCategory {
-	return &RepositoryCategory{db: db}
+func NewRepository(db *sqlx.DB) *Repository {
+	return &Repository{db: db}
 }
 
-func (r *RepositoryCategory) SelectCategories(_ context.Context) (*product_grpc.AllCategoryMessage, error) {
+func (r *Repository) SelectCategories(_ context.Context) (*product_grpc.AllCategoryMessage, error) {
 	query := `SELECT * FROM category`
 
 	var categories []*product_grpc.CategoryMessage
@@ -33,7 +33,7 @@ func (r *RepositoryCategory) SelectCategories(_ context.Context) (*product_grpc.
 	return allCategories, nil
 }
 
-func (r *RepositoryCategory) InsertCategory(_ context.Context, cat *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error) {
+func (r *Repository) InsertCategory(_ context.Context, cat *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error) {
 	query := `INSERT INTO category (category_name) VALUES ($1) RETURNING category_id, category_name`
 
 	category := &product_grpc.CategoryMessage{}
@@ -46,7 +46,7 @@ func (r *RepositoryCategory) InsertCategory(_ context.Context, cat *product_grpc
 	return category, nil
 }
 
-func (r *RepositoryCategory) UpdateCategory(_ context.Context, cat *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error) {
+func (r *Repository) UpdateCategory(_ context.Context, cat *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error) {
 	query := `UPDATE category SET category_name=$1 WHERE category_id=$2 RETURNING category_id, category_name`
 
 	category := &product_grpc.CategoryMessage{}
@@ -59,7 +59,7 @@ func (r *RepositoryCategory) UpdateCategory(_ context.Context, cat *product_grpc
 	return category, nil
 }
 
-func (r *RepositoryCategory) DeleteCategory(_ context.Context, id *product_grpc.CategoryRequest) (*product_grpc.CategoryResponse, error) {
+func (r *Repository) DeleteCategory(_ context.Context, id *product_grpc.CategoryRequest) (*product_grpc.CategoryResponse, error) {
 	query := `DELETE FROM category WHERE category_id=$1`
 
 	_, err := r.db.Exec(query, id.GetId())
