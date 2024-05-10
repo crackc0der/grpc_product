@@ -1,0 +1,7 @@
+FROM golang:1.22
+WORKDIR /usr/local/src
+
+COPY . .
+
+RUN make run
+

@@ -6,8 +6,16 @@ import (
 	"fmt"
 )
 
+type RepositoryInterface interface {
+	SelectProducts(ctx context.Context) (*product_grpc.AllProductMessage, error)
+	SelectProduct(ctx context.Context, id *product_grpc.ProductRequest) (*product_grpc.ProductMessage, error)
+	InsertProduct(ctx context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error)
+	DeleteProduct(ctx context.Context, id *product_grpc.ProductRequest) (*product_grpc.ProductResponse, error)
+	UpdateProduct(ctx context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error)
+}
+
 type Service struct {
-	repository *Repository
+	repository RepositoryInterface
 }
 
 func NewService(repository *Repository) *Service {

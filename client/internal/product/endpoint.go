@@ -9,8 +9,16 @@ import (
 	"net/http"
 )
 
+type ServiceInterface interface {
+	GetProducts(ctx context.Context) (*product_grpc.AllProductMessage, error)
+	GetProduct(ctx context.Context, id *product_grpc.ProductRequest) (*product_grpc.ProductMessage, error)
+	AddProduct(ctx context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error)
+	DeleteProduct(ctx context.Context, id *product_grpc.ProductRequest) (*product_grpc.ProductResponse, error)
+	UpdateProduct(ctx context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error)
+}
+
 type Endpoint struct {
-	service *Service
+	service ServiceInterface
 	log     *slog.Logger
 }
 

@@ -8,8 +8,15 @@ import (
 	"net/http"
 )
 
+type ServiceInterface interface {
+	GetCategories(ctx context.Context) (*product_grpc.AllCategoryMessage, error)
+	AddCategory(ctx context.Context, cat *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error)
+	UpdateCategory(ctx context.Context, cat *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error)
+	DeleteCategory(ctx context.Context, id *product_grpc.CategoryRequest) (*product_grpc.CategoryResponse, error)
+}
+
 type Endpoint struct {
-	service *Service
+	service ServiceInterface
 	log     *slog.Logger
 }
 
@@ -47,16 +54,16 @@ func (e *Endpoint) AddCategory(writer http.ResponseWriter, request *http.Request
 func (e *Endpoint) UpdateCategory(writer http.ResponseWriter, request *http.Request) {
 	var cat product_grpc.CategoryMessage
 	if err := json.NewDecoder(request.Body).Decode(&cat); err != nil {
-		e.log.Error("error in Endpoint's method AddCategory: " + err.Error())
+		e.log.Error("error in Endpoint's method UpdateCategory: " + err.Error())
 	}
 
 	category, err := e.service.UpdateCategory(context.Background(), &cat)
 	if err != nil {
-		e.log.Error("error in Endpoint's method AddCategory: " + err.Error())
+		e.log.Error("error in Endpoint's method UpdateCategory: " + err.Error())
 	}
 
 	if err = json.NewEncoder(writer).Encode(&category); err != nil {
-		e.log.Error("error in Endpoint's method AddCategory: " + err.Error())
+		e.log.Error("error in Endpoint's method UpdateCategory: " + err.Error())
 	}
 }
 

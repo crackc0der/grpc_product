@@ -10,8 +10,15 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
+type ServiceInterface interface {
+	GetCategories(ctx context.Context) (*product_grpc.AllCategoryMessage, error)
+	AddCategory(ctx context.Context, cat *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error)
+	UpdateCategory(ctx context.Context, cat *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error)
+	DeleteCategory(ctx context.Context, id *product_grpc.CategoryRequest) (*product_grpc.CategoryResponse, error)
+}
+
 type Endpoint struct {
-	service *Service
+	service ServiceInterface
 	log     *slog.Logger
 	product_grpc.UnimplementedCategoryServer
 }

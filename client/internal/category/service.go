@@ -6,8 +6,15 @@ import (
 	"fmt"
 )
 
+type RepositoryInterface interface {
+	SelectCategories(ctx context.Context) (*product_grpc.AllCategoryMessage, error)
+	InsertCategory(ctx context.Context, cat *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error)
+	UpdateCategory(ctx context.Context, cat *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error)
+	DeleteCategory(ctx context.Context, id *product_grpc.CategoryRequest) (*product_grpc.CategoryResponse, error)
+}
+
 type Service struct {
-	repository *Repository
+	repository RepositoryInterface
 }
 
 func NewService(repository *Repository) *Service {

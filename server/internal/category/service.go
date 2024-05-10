@@ -6,8 +6,15 @@ import (
 	product_grpc "server/api/note_v1"
 )
 
+type RepositoryInterface interface {
+	SelectCategories(_ context.Context) (*product_grpc.AllCategoryMessage, error)
+	InsertCategory(_ context.Context, cat *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error)
+	UpdateCategory(_ context.Context, cat *product_grpc.CategoryMessage) (*product_grpc.CategoryMessage, error)
+	DeleteCategory(_ context.Context, id *product_grpc.CategoryRequest) (*product_grpc.CategoryResponse, error)
+}
+
 type Service struct {
-	repository *Repository
+	repository RepositoryInterface
 }
 
 func NewService(repository *Repository) *Service {

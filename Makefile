@@ -1,5 +1,5 @@
 up:
-	docker-compose up -d
+	docker-compose up -d 
 
 down:
 	@docker ps -aq | xargs docker rm -f || true
@@ -13,7 +13,7 @@ status:
 stoped:
 	docker container ls -a
 
-run: 
+run-server: 
 	cd server && make run &
 
 lint-server:

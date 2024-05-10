@@ -27,7 +27,7 @@ func Run() {
 
 	logger := slog.New(slog.NewTextHandler(os.Stderr, nil))
 
-	conn, err := grpc.Dial(":50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(config.GrpcServerAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatal(err)
 	}

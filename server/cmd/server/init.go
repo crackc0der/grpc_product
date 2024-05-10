@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"log/slog"
 	"net"
@@ -31,7 +32,8 @@ func Run() {
 
 	dbConn, err := sqlx.Connect(config.DataBase.DBType, dsn)
 	if err != nil {
-		log.Fatal(err)
+		// log.Fatal(err)
+		fmt.Println(err)
 	}
 
 	productRepository := product.NewRepository(dbConn)
@@ -41,7 +43,7 @@ func Run() {
 	categoryRepository := category.NewRepository(dbConn)
 	categoryService := category.NewService(categoryRepository)
 	categoryEndpoint := category.NewEndpoint(categoryService, logger)
-
+	fmt.Println(config.Host.HostPort)
 	conn, err := net.Listen("tcp", config.Host.HostPort)
 	if err != nil {
 		log.Fatal("error in start grpc server: %w", err)

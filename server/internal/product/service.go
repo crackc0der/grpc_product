@@ -7,8 +7,16 @@ import (
 	product_grpc "server/api/note_v1"
 )
 
+type RepositoryInterface interface {
+	SelectProducts(_ context.Context) (*product_grpc.AllProductMessage, error)
+	SelectProductByID(_ context.Context, id *product_grpc.ProductRequest) (*product_grpc.ProductMessage, error)
+	InsertProduct(_ context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error)
+	DeleteProductByID(_ context.Context, productID *product_grpc.ProductRequest) (*product_grpc.ProductResponse, error)
+	UpdateProduct(_ context.Context, product *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error)
+}
+
 type Service struct {
-	repository *Repository
+	repository RepositoryInterface
 }
 
 func NewService(repository *Repository) *Service {
