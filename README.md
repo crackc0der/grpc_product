@@ -1,3 +1,5 @@
+RUN: make up
+
 **Categoryis**:
     GETALL:
         GET: get/categories
