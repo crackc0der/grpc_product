@@ -9,7 +9,7 @@ import (
 )
 
 type Config struct {
-	HttpPort          string `yaml:"httpPort"`
+	HTTPPort          string `yaml:"httpPort"`
 	GrpcServerAddress string `yaml:"grpcServerAddress"`
 }
 

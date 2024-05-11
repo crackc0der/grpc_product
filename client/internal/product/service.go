@@ -37,7 +37,7 @@ func (s *Service) GetProduct(ctx context.Context, id *product_grpc.ProductReques
 		return nil, fmt.Errorf("error in service.GetProduct: %w", err)
 	}
 
-	return product, err
+	return product, nil
 }
 
 func (s *Service) AddProduct(ctx context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
@@ -46,7 +46,7 @@ func (s *Service) AddProduct(ctx context.Context, prod *product_grpc.ProductMess
 		return nil, fmt.Errorf("error in service.AddProduct: %w", err)
 	}
 
-	return product, err
+	return product, nil
 }
 
 func (s *Service) DeleteProduct(ctx context.Context, id *product_grpc.ProductRequest) (*product_grpc.ProductResponse, error) {
@@ -55,7 +55,7 @@ func (s *Service) DeleteProduct(ctx context.Context, id *product_grpc.ProductReq
 		return nil, fmt.Errorf("error in service.DeleteProduct: %w", err)
 	}
 
-	return result, err
+	return result, nil
 }
 
 func (s *Service) UpdateProduct(ctx context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
@@ -64,5 +64,5 @@ func (s *Service) UpdateProduct(ctx context.Context, prod *product_grpc.ProductM
 		return nil, fmt.Errorf("error in service.UpdateProduct: %w", err)
 	}
 
-	return product, err
+	return product, nil
 }

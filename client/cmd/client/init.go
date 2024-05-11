@@ -3,6 +3,8 @@ package main
 import (
 	product_grpc "client/api/note_v1"
 	"client/config"
+	"client/internal/category"
+	"client/internal/product"
 	"log"
 	"log/slog"
 	"net/http"
@@ -11,9 +13,6 @@ import (
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-
-	"client/internal/category"
-	"client/internal/product"
 )
 
 func Run() {
@@ -54,9 +53,9 @@ func Run() {
 	mux.HandleFunc("GET /add/product", productEndpoint.AddProduct)
 	mux.HandleFunc("GET /update/product", productEndpoint.UpdateProduct)
 	mux.HandleFunc("GET /delete/product", productEndpoint.DeleteProduct)
-
+	//nolint
 	srv := http.Server{
-		Addr:              config.HttpPort,
+		Addr:              config.HTTPPort,
 		Handler:           mux,
 		ReadHeaderTimeout: time.Second * time.Duration(timeout),
 	}

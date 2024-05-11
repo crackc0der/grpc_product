@@ -1,23 +1,20 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"log/slog"
 	"net"
 	"os"
-
-	_ "github.com/jackc/pgx/v5/stdlib"
-	"github.com/jmoiron/sqlx"
+	product_grpc "server/api/note_v1"
+	"server/config"
+	"server/internal/category"
+	"server/internal/product"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	product_grpc "server/api/note_v1"
-
-	"server/config"
-	"server/internal/category"
-	"server/internal/product"
+	_ "github.com/jackc/pgx/v5/stdlib"
+	"github.com/jmoiron/sqlx"
 )
 
 func Run() {
@@ -32,8 +29,7 @@ func Run() {
 
 	dbConn, err := sqlx.Connect(config.DataBase.DBType, dsn)
 	if err != nil {
-		// log.Fatal(err)
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 
 	productRepository := product.NewRepository(dbConn)
@@ -43,7 +39,7 @@ func Run() {
 	categoryRepository := category.NewRepository(dbConn)
 	categoryService := category.NewService(categoryRepository)
 	categoryEndpoint := category.NewEndpoint(categoryService, logger)
-	fmt.Println(config.Host.HostPort)
+
 	conn, err := net.Listen("tcp", config.Host.HostPort)
 	if err != nil {
 		log.Fatal("error in start grpc server: %w", err)

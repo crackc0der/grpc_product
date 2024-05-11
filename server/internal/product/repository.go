@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	// Importing pgx for indirect use via another package.
 	_ "github.com/jackc/pgx/v5"
 	"github.com/jmoiron/sqlx"
 
@@ -38,28 +39,28 @@ func (r *Repository) SelectProducts(_ context.Context) (*product_grpc.AllProduct
 func (r *Repository) SelectProductByID(_ context.Context, id *product_grpc.ProductRequest) (*product_grpc.ProductMessage, error) {
 	query := "SELECT * FROM product WHERE product_id=$1"
 
-	product := &product_grpc.ProductMessage{}
-	fmt.Println(id.GetId())
-	err := r.db.Get(product, query, id.GetId())
+	var product product_grpc.ProductMessage
+
+	err := r.db.Get(&product, query, id.GetId())
 	if err != nil {
 		return nil, fmt.Errorf("error repository.SelectProductById: %w", err)
 	}
 
-	return product, nil
+	return &product, nil
 }
 
 func (r *Repository) InsertProduct(_ context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
 	query := `INSERT INTO product (product_name, product_category_id, product_price) VALUES($1, $2, $3) 
 		RETURNING product_id, product_name, product_category_id, product_price`
 
-	product := &product_grpc.ProductMessage{}
+	var product product_grpc.ProductMessage
 
-	err := r.db.QueryRowx(query, prod.ProductName, prod.ProductCategoryID, prod.ProductPrice).StructScan(product)
+	err := r.db.QueryRowx(query, prod.GetProductName(), prod.GetProductCategoryID(), prod.GetProductPrice()).StructScan(&product)
 	if err != nil {
 		return nil, fmt.Errorf("error repository.InsertProduct: %w", err)
 	}
 
-	return product, nil
+	return &product, nil
 }
 
 func (r *Repository) DeleteProductByID(_ context.Context, productID *product_grpc.ProductRequest) (*product_grpc.ProductResponse, error) {
@@ -77,12 +78,12 @@ func (r *Repository) UpdateProduct(_ context.Context, product *product_grpc.Prod
 	query := `UPDATE product SET product_name=$1, product_category_id=$2, product_price=$3 WHERE product_id=$4
 			RETURNING product_id, product_name, product_category_id, product_price`
 
-	updatedProduct := &product_grpc.ProductMessage{}
+	var updatedProduct product_grpc.ProductMessage
 
-	err := r.db.QueryRowx(query, product.ProductName, product.ProductCategoryID, product.ProductPrice, product.Id).StructScan(updatedProduct)
+	err := r.db.QueryRowx(query, product.GetProductName(), product.GetProductCategoryID(), product.GetProductPrice(), product.GetId()).StructScan(&updatedProduct)
 	if err != nil {
 		return nil, fmt.Errorf("error repository.UpdateProduct: %w", err)
 	}
 
-	return updatedProduct, nil
+	return &updatedProduct, nil
 }

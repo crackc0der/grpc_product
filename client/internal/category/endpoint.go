@@ -25,7 +25,7 @@ func NewEndpoint(service *Service, log *slog.Logger) *Endpoint {
 }
 
 func (e *Endpoint) GetCategories(writer http.ResponseWriter, request *http.Request) {
-	categories, err := e.service.GetCategories(context.Background())
+	categories, err := e.service.GetCategories(request.Context())
 	if err != nil {
 		e.log.Error("error in Endpoint's method GetCategories: " + err.Error())
 	}
@@ -41,7 +41,7 @@ func (e *Endpoint) AddCategory(writer http.ResponseWriter, request *http.Request
 		e.log.Error("error in Endpoint's method AddCategory: " + err.Error())
 	}
 
-	category, err := e.service.AddCategory(context.Background(), &cat)
+	category, err := e.service.AddCategory(request.Context(), &cat)
 	if err != nil {
 		e.log.Error("error in Endpoint's method AddCategory: " + err.Error())
 	}
@@ -57,7 +57,7 @@ func (e *Endpoint) UpdateCategory(writer http.ResponseWriter, request *http.Requ
 		e.log.Error("error in Endpoint's method UpdateCategory: " + err.Error())
 	}
 
-	category, err := e.service.UpdateCategory(context.Background(), &cat)
+	category, err := e.service.UpdateCategory(request.Context(), &cat)
 	if err != nil {
 		e.log.Error("error in Endpoint's method UpdateCategory: " + err.Error())
 	}
@@ -68,13 +68,13 @@ func (e *Endpoint) UpdateCategory(writer http.ResponseWriter, request *http.Requ
 }
 
 func (e *Endpoint) DeleteCategory(writer http.ResponseWriter, request *http.Request) {
-	id := &product_grpc.CategoryRequest{}
+	var categoryID product_grpc.CategoryRequest
 
-	if err := json.NewDecoder(request.Body).Decode(id); err != nil {
+	if err := json.NewDecoder(request.Body).Decode(&categoryID); err != nil {
 		e.log.Error("error in Endpoint's method DeleteCategory: " + err.Error())
 	}
 
-	result, err := e.service.DeleteCategory(context.Background(), id)
+	result, err := e.service.DeleteCategory(request.Context(), &categoryID)
 	if err != nil {
 		e.log.Error("error in Endpoint's method DeleteCategory: " + err.Error())
 	}

@@ -29,7 +29,7 @@ func (r *Repository) SelectProduct(ctx context.Context, id *product_grpc.Product
 		return nil, fmt.Errorf("error in repository.SelectProduct: %w", err)
 	}
 
-	return product, err
+	return product, nil
 }
 
 func (r *Repository) InsertProduct(ctx context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
@@ -38,7 +38,7 @@ func (r *Repository) InsertProduct(ctx context.Context, prod *product_grpc.Produ
 		return nil, fmt.Errorf("error in repository.InsertProduct: %w", err)
 	}
 
-	return product, err
+	return product, nil
 }
 
 func (r *Repository) DeleteProduct(ctx context.Context, id *product_grpc.ProductRequest) (*product_grpc.ProductResponse, error) {
@@ -47,7 +47,7 @@ func (r *Repository) DeleteProduct(ctx context.Context, id *product_grpc.Product
 		return nil, fmt.Errorf("error in repository.DeleteProduct: %w", err)
 	}
 
-	return result, err
+	return result, nil
 }
 
 func (r *Repository) UpdateProduct(ctx context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
@@ -56,5 +56,5 @@ func (r *Repository) UpdateProduct(ctx context.Context, prod *product_grpc.Produ
 		return nil, fmt.Errorf("error in repository.UpdateProduct: %w", err)
 	}
 
-	return product, err
+	return product, nil
 }

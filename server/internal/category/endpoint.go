@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log/slog"
 
-	product_grpc "server/api/note_v1"
-
 	"google.golang.org/protobuf/types/known/emptypb"
+
+	product_grpc "server/api/note_v1"
 )
 
 type ServiceInterface interface {
@@ -24,6 +24,7 @@ type Endpoint struct {
 }
 
 func NewEndpoint(service *Service, log *slog.Logger) *Endpoint {
+	//nolint
 	return &Endpoint{service: service, log: log}
 }
 
@@ -32,6 +33,7 @@ func (e *Endpoint) GetCategories(ctx context.Context, _ *emptypb.Empty) (*produc
 	if err != nil {
 		return nil, fmt.Errorf("error in endpoint's method GetCategories: %w", err)
 	}
+
 	return categories, nil
 }
 

@@ -27,3 +27,9 @@ gen-grpc-server:
 
 gen-grpc-client:
 	protoc --proto_path client/api/note_v1 --go_out=client/api/note_v1 --go_opt=paths=source_relative --go-grpc_out=client/api/note_v1 --go-grpc_opt=paths=source_relative client/api/note_v1/api.proto
+
+golint-server:
+	cd server/ && golangci-lint run --enable-all
+
+golint-client:
+	cd client/ && golangci-lint run --enable-all

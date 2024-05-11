@@ -4,7 +4,6 @@ import (
 	product_grpc "client/api/note_v1"
 	"context"
 	"encoding/json"
-	"fmt"
 	"log/slog"
 	"net/http"
 )
@@ -27,7 +26,7 @@ func NewEndpoint(service *Service, log *slog.Logger) *Endpoint {
 }
 
 func (e *Endpoint) GetProducts(writer http.ResponseWriter, request *http.Request) {
-	products, err := e.service.GetProducts(context.Background())
+	products, err := e.service.GetProducts(request.Context())
 	if err != nil {
 		e.log.Error("error in endpoint.GetProducts: " + err.Error())
 	}
@@ -38,13 +37,13 @@ func (e *Endpoint) GetProducts(writer http.ResponseWriter, request *http.Request
 }
 
 func (e *Endpoint) GetProduct(writer http.ResponseWriter, request *http.Request) {
-	id := &product_grpc.ProductRequest{}
+	var productID product_grpc.ProductRequest
 
-	if err := json.NewDecoder(request.Body).Decode(&id); err != nil {
-		e.log.Error("error in enpoint.GetProductAAAAAAAAAAA: " + err.Error())
+	if err := json.NewDecoder(request.Body).Decode(&productID); err != nil {
+		e.log.Error("error in enpoint.GetProduct: " + err.Error())
 	}
-	fmt.Println(id)
-	product, err := e.service.GetProduct(context.Background(), id)
+
+	product, err := e.service.GetProduct(request.Context(), &productID)
 	if err != nil {
 		e.log.Error("error in enpoint.GetProduct: " + err.Error())
 	}
@@ -55,13 +54,13 @@ func (e *Endpoint) GetProduct(writer http.ResponseWriter, request *http.Request)
 }
 
 func (e *Endpoint) AddProduct(writer http.ResponseWriter, request *http.Request) {
-	prod := &product_grpc.ProductMessage{}
+	var prod product_grpc.ProductMessage
 
-	if err := json.NewDecoder(request.Body).Decode(prod); err != nil {
+	if err := json.NewDecoder(request.Body).Decode(&prod); err != nil {
 		e.log.Error("error in enpoint.AddProduct: " + err.Error())
 	}
 
-	product, err := e.service.AddProduct(context.Background(), prod)
+	product, err := e.service.AddProduct(request.Context(), &prod)
 	if err != nil {
 		e.log.Error("error in enpoint.AddProduct: " + err.Error())
 	}
@@ -72,13 +71,13 @@ func (e *Endpoint) AddProduct(writer http.ResponseWriter, request *http.Request)
 }
 
 func (e *Endpoint) DeleteProduct(writer http.ResponseWriter, request *http.Request) {
-	id := &product_grpc.ProductRequest{}
+	var productID product_grpc.ProductRequest
 
-	if err := json.NewDecoder(request.Body).Decode(id); err != nil {
+	if err := json.NewDecoder(request.Body).Decode(&productID); err != nil {
 		e.log.Error("error in Delete.AddProduct: " + err.Error())
 	}
 
-	result, err := e.service.DeleteProduct(context.Background(), id)
+	result, err := e.service.DeleteProduct(request.Context(), &productID)
 	if err != nil {
 		e.log.Error("error in Delete.AddProduct: " + err.Error())
 	}
@@ -89,13 +88,13 @@ func (e *Endpoint) DeleteProduct(writer http.ResponseWriter, request *http.Reque
 }
 
 func (e *Endpoint) UpdateProduct(writer http.ResponseWriter, request *http.Request) {
-	prod := &product_grpc.ProductMessage{}
+	var prod product_grpc.ProductMessage
 
-	if err := json.NewDecoder(request.Body).Decode(prod); err != nil {
+	if err := json.NewDecoder(request.Body).Decode(&prod); err != nil {
 		e.log.Error("error in Update.AddProduct: " + err.Error())
 	}
 
-	product, err := e.service.UpdateProduct(context.Background(), prod)
+	product, err := e.service.UpdateProduct(request.Context(), &prod)
 	if err != nil {
 		e.log.Error("error in Update.AddProduct: " + err.Error())
 	}

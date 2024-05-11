@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log/slog"
 
-	product_grpc "server/api/note_v1"
-
 	"google.golang.org/protobuf/types/known/emptypb"
+
+	product_grpc "server/api/note_v1"
 )
 
 type ServiceInterface interface {
@@ -25,6 +25,7 @@ type Endpoint struct {
 }
 
 func NewEndpoint(service *Service, log *slog.Logger) *Endpoint {
+	//nolint
 	return &Endpoint{service: service, log: log}
 }
 
@@ -33,7 +34,7 @@ func (e *Endpoint) GetProducts(ctx context.Context, _ *emptypb.Empty) (*product_
 	if err != nil {
 		e.log.Error("error in endpoint.GetProducts: " + err.Error())
 
-		return nil, err
+		return nil, fmt.Errorf("error in endpoint.GetProducts: %w", err)
 	}
 
 	return products, nil
@@ -44,7 +45,7 @@ func (e *Endpoint) GetProduct(ctx context.Context, id *product_grpc.ProductReque
 	if err != nil {
 		e.log.Error("error in endpoint.GetProduct: " + err.Error())
 
-		return nil, err
+		return nil, fmt.Errorf("error in endpoint.GetProduct: %w", err)
 	}
 
 	return product, nil
@@ -55,7 +56,7 @@ func (e *Endpoint) AddProduct(ctx context.Context, prod *product_grpc.ProductMes
 	if err != nil {
 		e.log.Error("error in endpoint.AddProduct: " + err.Error())
 
-		return nil, err
+		return nil, fmt.Errorf("error in endpoint.AddProduct: %w", err)
 	}
 
 	return product, nil
@@ -66,19 +67,18 @@ func (e *Endpoint) DeleteProduct(ctx context.Context, id *product_grpc.ProductRe
 	if err != nil {
 		e.log.Error("error in endpoint.DeleteProduct: " + err.Error())
 
-		return nil, err
+		return nil, fmt.Errorf("error in endpoint.DeleteProduct: %w", err)
 	}
 
 	return &product_grpc.ProductResponse{Deleted: res.GetDeleted()}, nil
 }
 
 func (e *Endpoint) UpdateProduct(ctx context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
-	fmt.Println(prod)
 	product, err := e.service.UpdateProduct(ctx, prod)
 	if err != nil {
 		e.log.Error("error in endpoint.UpdateProduct: " + err.Error())
 
-		return nil, err
+		return nil, fmt.Errorf("error in endpoint.UpdateProduct: %w", err)
 	}
 
 	return product, nil
