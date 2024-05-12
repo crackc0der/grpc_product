@@ -52,7 +52,7 @@ func Run() {
 	mux.HandleFunc("GET /product", productEndpoint.GetProduct)
 	mux.HandleFunc("POST /product", productEndpoint.AddProduct)
 	mux.HandleFunc("PUT /product", productEndpoint.UpdateProduct)
-	mux.HandleFunc("DELETE /product", productEndpoint.DeleteProduct)s
+	mux.HandleFunc("DELETE /product", productEndpoint.DeleteProduct)
 	//nolint
 	srv := http.Server{
 		Addr:              config.HTTPPort,

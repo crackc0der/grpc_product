@@ -2,48 +2,48 @@ RUN: make up
 
 **Categoryis**:
     GETALL:
-        GET: get/categories
+        GET: /categories
 
     ADD:
         {
             "CategoryName: "category_name"
         }
 
-        GET: add/category
+        POST: /category
 
     UPDATE:
         {
             "Id": category_id
         }
 
-        GET: update/category
+        PUT: /category
 
     DELETE:
         {
             "Id": category_id
         }
 
-        GET: delete/category
+        DELETE: /category
 
 **Peoducts**:
     GETALL:
-        GET: get/products
+        GET: /products
 
     GET:
         {
             "Id": product_id
         }
 
-        GET: get/product
+        GET: /product
 
     ADD:
         {
-            ProductName": "product_name",
+            "ProductName": "product_name",
             "ProductCategory": product_category_id,
             "ProductPrice": peoduct_price
         }
 
-        GET: add/product
+        POST: /product
 
     UPDATE:
         {
@@ -53,11 +53,11 @@ RUN: make up
             "ProductPrice": peoduct_price            
         }
 
-        GET: update/product
+        PUT: /product
 
     DELETE:
         {
             "ProductId": product_id
         }
 
-        GET: delete/product
+        DELETE: /product
