@@ -43,16 +43,16 @@ func Run() {
 	productService := product.NewService(productRepository)
 	productEndpoint := product.NewEndpoint(productService, logger)
 
-	mux.HandleFunc("GET /get/categories", categoryEndpoint.GetCategories)
-	mux.HandleFunc("GET /add/category", categoryEndpoint.AddCategory)
-	mux.HandleFunc("GET /update/category", categoryEndpoint.UpdateCategory)
-	mux.HandleFunc("GET /delete/category", categoryEndpoint.DeleteCategory)
+	mux.HandleFunc("GET /categories", categoryEndpoint.GetCategories)
+	mux.HandleFunc("POST /category", categoryEndpoint.AddCategory)
+	mux.HandleFunc("PUT /category", categoryEndpoint.UpdateCategory)
+	mux.HandleFunc("DELETE /category", categoryEndpoint.DeleteCategory)
 
-	mux.HandleFunc("GET /get/products", productEndpoint.GetProducts)
-	mux.HandleFunc("GET /get/product", productEndpoint.GetProduct)
-	mux.HandleFunc("GET /add/product", productEndpoint.AddProduct)
-	mux.HandleFunc("GET /update/product", productEndpoint.UpdateProduct)
-	mux.HandleFunc("GET /delete/product", productEndpoint.DeleteProduct)
+	mux.HandleFunc("GET /products", productEndpoint.GetProducts)
+	mux.HandleFunc("GET /product", productEndpoint.GetProduct)
+	mux.HandleFunc("POST /product", productEndpoint.AddProduct)
+	mux.HandleFunc("PUT /product", productEndpoint.UpdateProduct)
+	mux.HandleFunc("DELETE /product", productEndpoint.DeleteProduct)s
 	//nolint
 	srv := http.Server{
 		Addr:              config.HTTPPort,
