@@ -3,16 +3,14 @@ package product
 import (
 	"context"
 	"fmt"
-
-	product_grpc "server/api/note_v1"
 )
 
 type RepositoryInterface interface {
-	SelectProducts(_ context.Context) (*product_grpc.AllProductMessage, error)
-	SelectProductByID(_ context.Context, id *product_grpc.ProductRequest) (*product_grpc.ProductMessage, error)
-	InsertProduct(_ context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error)
-	DeleteProductByID(_ context.Context, productID *product_grpc.ProductRequest) (*product_grpc.ProductResponse, error)
-	UpdateProduct(_ context.Context, product *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error)
+	SelectProducts(_ context.Context) ([]Product, error)
+	SelectProductByID(_ context.Context, productID int64) (*Product, error)
+	InsertProduct(_ context.Context, prod *Product) (*Product, error)
+	DeleteProductByID(_ context.Context, productID int64) (bool, error)
+	UpdateProduct(_ context.Context, product *Product) (*Product, error)
 }
 
 type Service struct {
@@ -23,7 +21,7 @@ func NewService(repository *Repository) *Service {
 	return &Service{repository: repository}
 }
 
-func (s *Service) GetProducts(ctx context.Context) (*product_grpc.AllProductMessage, error) {
+func (s *Service) GetProducts(ctx context.Context) ([]Product, error) {
 	products, err := s.repository.SelectProducts(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("error getting products in service's method GetProducts: %w", err)
@@ -32,8 +30,8 @@ func (s *Service) GetProducts(ctx context.Context) (*product_grpc.AllProductMess
 	return products, nil
 }
 
-func (s *Service) GetProduct(ctx context.Context, id *product_grpc.ProductRequest) (*product_grpc.ProductMessage, error) {
-	product, err := s.repository.SelectProductByID(ctx, id)
+func (s *Service) GetProduct(ctx context.Context, productID int64) (*Product, error) {
+	product, err := s.repository.SelectProductByID(ctx, productID)
 	if err != nil {
 		return nil, fmt.Errorf("error in service.GetProduct: %w", err)
 	}
@@ -41,7 +39,7 @@ func (s *Service) GetProduct(ctx context.Context, id *product_grpc.ProductReques
 	return product, nil
 }
 
-func (s *Service) AddProduct(ctx context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
+func (s *Service) AddProduct(ctx context.Context, prod *Product) (*Product, error) {
 	product, err := s.repository.InsertProduct(ctx, prod)
 	if err != nil {
 		return nil, fmt.Errorf("error in service.AddProduct: %w", err)
@@ -50,19 +48,19 @@ func (s *Service) AddProduct(ctx context.Context, prod *product_grpc.ProductMess
 	return product, nil
 }
 
-func (s *Service) DeleteProduct(ctx context.Context, productID *product_grpc.ProductRequest) (*product_grpc.ProductResponse, error) {
-	res, err := s.repository.DeleteProductByID(ctx, productID)
+func (s *Service) DeleteProduct(ctx context.Context, productID int64) (bool, error) {
+	result, err := s.repository.DeleteProductByID(ctx, productID)
 	if err != nil {
-		return nil, fmt.Errorf("error in service.DeleteProduct: %w", err)
+		return result, fmt.Errorf("error in service.DeleteProduct: %w", err)
 	}
 
-	return &product_grpc.ProductResponse{Deleted: res.GetDeleted()}, nil
+	return result, nil
 }
 
-func (s *Service) UpdateProduct(ctx context.Context, product *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
+func (s *Service) UpdateProduct(ctx context.Context, product *Product) (*Product, error) {
 	product, err := s.repository.UpdateProduct(ctx, product)
 	if err != nil {
-		return nil, fmt.Errorf("error in service.UpdateProduct: %w", err)
+		return nil, fmt.Errorf("error in service.UpdateProduct22222222222222: %w", err)
 	}
 
 	return product, nil
