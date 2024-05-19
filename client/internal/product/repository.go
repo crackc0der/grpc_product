@@ -14,47 +14,101 @@ func NewRepository(cl product_grpc.ProductClient) *Repository {
 	return &Repository{client: cl}
 }
 
-func (r *Repository) SelectProducts(ctx context.Context) (*product_grpc.AllProductMessage, error) {
+func (r *Repository) SelectProducts(ctx context.Context) ([]*Product, error) {
+	productResult := []*Product{}
+
 	products, err := r.client.GetProducts(ctx, nil)
 	if err != nil {
-		return nil, fmt.Errorf("error in repository.SelectProducts: %w", err)
+		return nil, fmt.Errorf("error in API's repository.SelectProducts: %w", err)
 	}
 
-	return products, nil
+	for _, product := range products.GetProducts() {
+		prod := &Product{
+			ID:                product.GetId(),
+			ProductName:       product.GetProductName(),
+			ProductCategoryID: product.GetProductCategoryID(),
+			ProductPrice:      product.GetProductPrice(),
+		}
+
+		productResult = append(productResult, prod)
+	}
+
+	return productResult, nil
 }
 
-func (r *Repository) SelectProduct(ctx context.Context, id *product_grpc.ProductRequest) (*product_grpc.ProductMessage, error) {
-	product, err := r.client.GetProduct(ctx, id)
+func (r *Repository) SelectProduct(ctx context.Context, id int64) (*Product, error) {
+	productRequest := &product_grpc.ProductRequest{Id: id}
+
+	product, err := r.client.GetProduct(ctx, productRequest)
 	if err != nil {
-		return nil, fmt.Errorf("error in repository.SelectProduct: %w", err)
+		return nil, fmt.Errorf("error in API's repository.SelectProduct: %w", err)
 	}
 
-	return product, nil
+	productResult := &Product{
+		ID:                product.GetId(),
+		ProductName:       product.GetProductName(),
+		ProductCategoryID: product.GetProductCategoryID(),
+		ProductPrice:      product.GetProductPrice(),
+	}
+
+	return productResult, nil
 }
 
-func (r *Repository) InsertProduct(ctx context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
-	product, err := r.client.AddProduct(ctx, prod)
-	if err != nil {
-		return nil, fmt.Errorf("error in repository.InsertProduct: %w", err)
+func (r *Repository) InsertProduct(ctx context.Context, prod *Product) (*Product, error) {
+	productMessage := &product_grpc.ProductMessage{
+		Id:                prod.ID,
+		ProductName:       prod.ProductName,
+		ProductCategoryID: prod.ProductCategoryID,
+		ProductPrice:      prod.ProductPrice,
 	}
 
-	return product, nil
+	product, err := r.client.AddProduct(ctx, productMessage)
+	if err != nil {
+		return nil, fmt.Errorf("error in API's repository.InsertProduct: %w", err)
+	}
+
+	productResult := &Product{
+		ID:                product.GetId(),
+		ProductName:       product.GetProductName(),
+		ProductCategoryID: product.GetProductCategoryID(),
+		ProductPrice:      product.GetProductPrice(),
+	}
+
+	return productResult, nil
 }
 
-func (r *Repository) DeleteProduct(ctx context.Context, id *product_grpc.ProductRequest) (*product_grpc.ProductResponse, error) {
-	result, err := r.client.DeleteProduct(ctx, id)
-	if err != nil {
-		return nil, fmt.Errorf("error in repository.DeleteProduct: %w", err)
+func (r *Repository) DeleteProduct(ctx context.Context, id int64) (bool, error) {
+	catID := &product_grpc.ProductRequest{
+		Id: id,
 	}
 
-	return result, nil
+	deleted, err := r.client.DeleteProduct(ctx, catID)
+	if err != nil {
+		return deleted.GetDeleted(), fmt.Errorf("error in API's repository.DeleteProduct: %w", err)
+	}
+
+	return deleted.GetDeleted(), nil
 }
 
-func (r *Repository) UpdateProduct(ctx context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error) {
-	product, err := r.client.UpdateProduct(ctx, prod)
-	if err != nil {
-		return nil, fmt.Errorf("error in repository.UpdateProduct: %w", err)
+func (r *Repository) UpdateProduct(ctx context.Context, prod *Product) (*Product, error) {
+	productMessage := &product_grpc.ProductMessage{
+		Id:                prod.ID,
+		ProductName:       prod.ProductName,
+		ProductCategoryID: prod.ProductCategoryID,
+		ProductPrice:      prod.ProductPrice,
 	}
 
-	return product, nil
+	product, err := r.client.UpdateProduct(ctx, productMessage)
+	if err != nil {
+		return nil, fmt.Errorf("error in API's repository.UpdateProduct: %w", err)
+	}
+
+	productResult := &Product{
+		ID:                productMessage.GetId(),
+		ProductName:       product.GetProductName(),
+		ProductCategoryID: product.GetProductCategoryID(),
+		ProductPrice:      product.GetProductPrice(),
+	}
+
+	return productResult, nil
 }

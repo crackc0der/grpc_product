@@ -1,19 +1,19 @@
 package product
 
 import (
-	product_grpc "client/api/note_v1"
 	"context"
 	"encoding/json"
 	"log/slog"
 	"net/http"
+	"strconv"
 )
 
 type ServiceInterface interface {
-	GetProducts(ctx context.Context) (*product_grpc.AllProductMessage, error)
-	GetProduct(ctx context.Context, id *product_grpc.ProductRequest) (*product_grpc.ProductMessage, error)
-	AddProduct(ctx context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error)
-	DeleteProduct(ctx context.Context, id *product_grpc.ProductRequest) (*product_grpc.ProductResponse, error)
-	UpdateProduct(ctx context.Context, prod *product_grpc.ProductMessage) (*product_grpc.ProductMessage, error)
+	GetProducts(ctx context.Context) ([]*Product, error)
+	GetProduct(ctx context.Context, id int64) (*Product, error)
+	AddProduct(ctx context.Context, prod *Product) (*Product, error)
+	DeleteProduct(ctx context.Context, id int64) (bool, error)
+	UpdateProduct(ctx context.Context, prod *Product) (*Product, error)
 }
 
 type Endpoint struct {
@@ -28,78 +28,80 @@ func NewEndpoint(service *Service, log *slog.Logger) *Endpoint {
 func (e *Endpoint) GetProducts(writer http.ResponseWriter, request *http.Request) {
 	products, err := e.service.GetProducts(request.Context())
 	if err != nil {
-		e.log.Error("error in endpoint.GetProducts: " + err.Error())
+		e.log.Error("error in API's endpoint.GetProducts: " + err.Error())
 	}
 
 	if err := json.NewEncoder(writer).Encode(&products); err != nil {
-		e.log.Error("error in endpoint.GetProducts: " + err.Error())
+		e.log.Error("error in API's endpoint.GetProducts: " + err.Error())
 	}
 }
 
 func (e *Endpoint) GetProduct(writer http.ResponseWriter, request *http.Request) {
-	var productID product_grpc.ProductRequest
+	param := request.PathValue("id")
 
-	if err := json.NewDecoder(request.Body).Decode(&productID); err != nil {
-		e.log.Error("error in enpoint.GetProduct: " + err.Error())
+	productID, err := strconv.Atoi(param)
+	if err != nil {
+		e.log.Error("error in API's endpoint.GetProduct: " + err.Error())
 	}
 
-	product, err := e.service.GetProduct(request.Context(), &productID)
+	product, err := e.service.GetProduct(request.Context(), int64(productID))
 	if err != nil {
-		e.log.Error("error in enpoint.GetProduct: " + err.Error())
+		e.log.Error("error in API's enpoint.GetProduct: " + err.Error())
 	}
 
 	if err = json.NewEncoder(writer).Encode(&product); err != nil {
-		e.log.Error("error in enpoint.GetProduct: " + err.Error())
+		e.log.Error("error in API's enpoint.GetProduct: " + err.Error())
 	}
 }
 
 func (e *Endpoint) AddProduct(writer http.ResponseWriter, request *http.Request) {
-	var prod product_grpc.ProductMessage
+	var prod Product
 
 	if err := json.NewDecoder(request.Body).Decode(&prod); err != nil {
-		e.log.Error("error in enpoint.AddProduct: " + err.Error())
+		e.log.Error("error in API's enpoint.AddProduct: " + err.Error())
 	}
 
 	product, err := e.service.AddProduct(request.Context(), &prod)
 	if err != nil {
-		e.log.Error("error in enpoint.AddProduct: " + err.Error())
+		e.log.Error("error in API's enpoint.AddProduct: " + err.Error())
 	}
 
 	if err := json.NewEncoder(writer).Encode(product); err != nil {
-		e.log.Error("error in enpoint.AddProduct: " + err.Error())
+		e.log.Error("error in API's enpoint.AddProduct: " + err.Error())
 	}
 }
 
 func (e *Endpoint) DeleteProduct(writer http.ResponseWriter, request *http.Request) {
-	var productID product_grpc.ProductRequest
+	param := request.PathValue("id")
 
-	if err := json.NewDecoder(request.Body).Decode(&productID); err != nil {
-		e.log.Error("error in Delete.AddProduct: " + err.Error())
+	productID, err := strconv.Atoi(param)
+	if err != nil {
+		e.log.Error("error in API's endpoint.GetProduct: " + err.Error())
 	}
 
-	result, err := e.service.DeleteProduct(request.Context(), &productID)
+	result, err := e.service.DeleteProduct(request.Context(), int64(productID))
 	if err != nil {
-		e.log.Error("error in Delete.AddProduct: " + err.Error())
+		e.log.Error("error in API's endpoint.DeleteProduct: " + err.Error())
 	}
 
 	if err = json.NewEncoder(writer).Encode(result); err != nil {
-		e.log.Error("error in Delete.AddProduct: " + err.Error())
+		e.log.Error("error in API's endpoint.DeleteProduct: " + err.Error())
 	}
 }
 
 func (e *Endpoint) UpdateProduct(writer http.ResponseWriter, request *http.Request) {
-	var prod product_grpc.ProductMessage
+	var prod Product
 
 	if err := json.NewDecoder(request.Body).Decode(&prod); err != nil {
-		e.log.Error("error in Update.AddProduct: " + err.Error())
+		e.log.Error("error in API's endpoint.UpdateProduct: " + err.Error())
 	}
 
 	product, err := e.service.UpdateProduct(request.Context(), &prod)
 	if err != nil {
-		e.log.Error("error in Update.AddProduct: " + err.Error())
+		e.log.Error("error in API's endpoint.UpdateProduct: " + err.Error())
 	}
 
 	if err = json.NewEncoder(writer).Encode(product); err != nil {
-		e.log.Error("error in Update.AddProduct: " + err.Error())
+		e.log.Error("error in API's endpoint.UpdateProduct: " + err.Error())
 	}
 }

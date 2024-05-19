@@ -24,20 +24,20 @@ func (r *Repository) SelectProducts(_ context.Context) ([]Product, error) {
 
 	err := r.db.Select(&products, query)
 	if err != nil {
-		return nil, fmt.Errorf("error in repository.SelectProducts: %w", err)
+		return nil, fmt.Errorf("error in Server's repository.SelectProducts: %w", err)
 	}
 
 	return products, nil
 }
 
 func (r *Repository) SelectProductByID(_ context.Context, productID int64) (*Product, error) {
-	query := "SELECT * FROM product WHERE product_id=$1"
-
 	var product Product
+
+	query := "SELECT * FROM product WHERE product_id=$1"
 
 	err := r.db.Get(&product, query, productID)
 	if err != nil {
-		return nil, fmt.Errorf("error repository.SelectProductById: %w", err)
+		return nil, fmt.Errorf("error in Server's repository.SelectProductById: %w", err)
 	}
 
 	return &product, nil
@@ -51,7 +51,7 @@ func (r *Repository) InsertProduct(_ context.Context, prod *Product) (*Product, 
 
 	err := r.db.QueryRowx(query, prod.ProductName, prod.ProductCategoryID, prod.ProductPrice).StructScan(&product)
 	if err != nil {
-		return nil, fmt.Errorf("error repository.InsertProduct: %w", err)
+		return nil, fmt.Errorf("error in Server's repository.InsertProduct: %w", err)
 	}
 
 	return &product, nil
@@ -62,7 +62,7 @@ func (r *Repository) DeleteProductByID(_ context.Context, productID int64) (bool
 
 	_, err := r.db.Exec(query, productID)
 	if err != nil {
-		return false, fmt.Errorf("error repository.DeleteProductById: %w", err)
+		return false, fmt.Errorf("error in Server's repository.DeleteProductById: %w", err)
 	}
 
 	return true, nil
@@ -73,10 +73,10 @@ func (r *Repository) UpdateProduct(_ context.Context, product *Product) (*Produc
 			RETURNING product_id, product_name, product_category_id, product_price`
 
 	var updatedProduct Product
-	fmt.Println(product)
+
 	err := r.db.QueryRowx(query, product.ProductName, product.ProductCategoryID, product.ProductPrice, product.ID).StructScan(&updatedProduct)
 	if err != nil {
-		return nil, fmt.Errorf("error repository.UpdateProduct33333333333333: %w", err)
+		return nil, fmt.Errorf("error in Server's repository.UpdateProduct: %w", err)
 	}
 
 	return &updatedProduct, nil

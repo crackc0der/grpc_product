@@ -23,7 +23,7 @@ func NewService(repository *Repository) *Service {
 func (s *Service) GetCategories(ctx context.Context) ([]Category, error) {
 	categories, err := s.repository.SelectCategories(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("error in service's method GetCategories: %w", err)
+		return nil, fmt.Errorf("error in Server's service.GetCategories: %w", err)
 	}
 
 	return categories, nil
@@ -32,7 +32,7 @@ func (s *Service) GetCategories(ctx context.Context) ([]Category, error) {
 func (s *Service) AddCategory(ctx context.Context, category *Category) (*Category, error) {
 	category, err := s.repository.InsertCategory(ctx, category)
 	if err != nil {
-		return nil, fmt.Errorf("error in service's method AddCategory: %w", err)
+		return nil, fmt.Errorf("error in Server's service.AddCategory: %w", err)
 	}
 
 	return category, nil
@@ -41,7 +41,7 @@ func (s *Service) AddCategory(ctx context.Context, category *Category) (*Categor
 func (s *Service) UpdateCategory(ctx context.Context, category *Category) (*Category, error) {
 	category, err := s.repository.UpdateCategory(ctx, category)
 	if err != nil {
-		return nil, fmt.Errorf("error in service's method UpdateCategory: %w", err)
+		return nil, fmt.Errorf("error in Server's service.UpdateCategory: %w", err)
 	}
 
 	return category, nil
@@ -50,7 +50,7 @@ func (s *Service) UpdateCategory(ctx context.Context, category *Category) (*Cate
 func (s *Service) DeleteCategory(ctx context.Context, id int64) (bool, error) {
 	result, err := s.repository.DeleteCategory(ctx, id)
 	if err != nil {
-		return result, fmt.Errorf("error in service's method DeleteCategory: %w", err)
+		return result, fmt.Errorf("error in Server's service.DeleteCategory: %w", err)
 	}
 
 	return result, nil

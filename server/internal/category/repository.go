@@ -22,7 +22,7 @@ func (r *Repository) SelectCategories(_ context.Context) ([]Category, error) {
 
 	err := r.db.Select(&categories, query)
 	if err != nil {
-		return nil, fmt.Errorf("error in repository's method SelectCategories: %w", err)
+		return nil, fmt.Errorf("error in Server's repository.SelectCategories: %w", err)
 	}
 
 	return categories, nil
@@ -35,7 +35,7 @@ func (r *Repository) InsertCategory(_ context.Context, cat *Category) (*Category
 
 	err := r.db.QueryRowx(query, cat.CategoryName).StructScan(&category)
 	if err != nil {
-		return nil, fmt.Errorf("error in repository's method InsertCategory: %w", err)
+		return nil, fmt.Errorf("error in Server's repository.InsertCategory: %w", err)
 	}
 
 	return &category, nil
@@ -48,7 +48,7 @@ func (r *Repository) UpdateCategory(_ context.Context, cat *Category) (*Category
 
 	err := r.db.QueryRowx(query, cat.CategoryName, cat.CategoryID).StructScan(&category)
 	if err != nil {
-		return nil, fmt.Errorf("error in repository's method UpdateCategory: %w", err)
+		return nil, fmt.Errorf("error in Server's repository.UpdateCategory: %w", err)
 	}
 
 	return &category, nil
@@ -59,7 +59,7 @@ func (r *Repository) DeleteCategory(_ context.Context, id int64) (bool, error) {
 
 	_, err := r.db.Exec(query, id)
 	if err != nil {
-		return false, fmt.Errorf("error in repository's method DeleteCategory: %w", err)
+		return false, fmt.Errorf("error in Server's repository.DeleteCategory: %w", err)
 	}
 
 	return true, nil

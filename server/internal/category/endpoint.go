@@ -33,7 +33,7 @@ func (e *Endpoint) GetCategories(ctx context.Context, _ *emptypb.Empty) (*produc
 
 	categories, err := e.service.GetCategories(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("error in endpoint's method GetCategories: %w", err)
+		return nil, fmt.Errorf("error in Server's endpoint.GetCategories: %w", err)
 	}
 
 	for _, category := range categories {
@@ -58,7 +58,7 @@ func (e *Endpoint) AddCategory(ctx context.Context, cat *product_grpc.CategoryMe
 
 	category, err := e.service.AddCategory(ctx, categoryStruct)
 	if err != nil {
-		return nil, fmt.Errorf("error in endpoint's method AddCategory: %w", err)
+		return nil, fmt.Errorf("error in Server's endpoint.AddCategory: %w", err)
 	}
 
 	categoryMessage := &product_grpc.CategoryMessage{
@@ -77,9 +77,7 @@ func (e *Endpoint) UpdateCategory(ctx context.Context, cat *product_grpc.Categor
 
 	category, err := e.service.UpdateCategory(ctx, categoryStruct)
 	if err != nil {
-		e.log.Error("error in Endpoint's method UpdateCategory: " + err.Error())
-
-		return nil, fmt.Errorf("error in service's method UpdateCategory: %w", err)
+		return nil, fmt.Errorf("error in Server's endpoint.UpdateCategory: %w", err)
 	}
 
 	categoryMessage := &product_grpc.CategoryMessage{
@@ -93,9 +91,7 @@ func (e *Endpoint) UpdateCategory(ctx context.Context, cat *product_grpc.Categor
 func (e *Endpoint) DeleteCategory(ctx context.Context, catID *product_grpc.CategoryRequest) (*product_grpc.CategoryResponse, error) {
 	result, err := e.service.DeleteCategory(ctx, catID.GetId())
 	if err != nil {
-		e.log.Error("error in Endpoint's method DeleteCategory: " + err.Error())
-
-		return nil, fmt.Errorf("error in service's method DeleteCategory: %w", err)
+		return nil, fmt.Errorf("error in Server's endpoint.DeleteCategory: %w", err)
 	}
 
 	return &product_grpc.CategoryResponse{Deleted: result}, nil
