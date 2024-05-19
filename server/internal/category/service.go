@@ -16,7 +16,7 @@ type Service struct {
 	repository RepositoryInterface
 }
 
-func NewService(repository *Repository) *Service {
+func NewService(repository RepositoryInterface) *Service {
 	return &Service{repository: repository}
 }
 

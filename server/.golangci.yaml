@@ -16,4 +16,6 @@ linters:
     - gomnd
     - execinquery
     - gci
+    - funlen
+    - testpackage
 
