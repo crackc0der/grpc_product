@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  
+  db:
+    container_name: db
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: shop
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 7777777
+    ports:
+      - 5432:5432
+    volumes:
+      - ./server/migrations/migrations_up.sql:/docker-entrypoint-initdb.d/migrations_up.sql
+      - ./data:/var/lib/postgresql/data
+    networks:
+     - appnetwork
+
+  product_service:
+    container_name: server
+    build: server/
+    networks:
+      - appnetwork
+    depends_on:
+      - db
+
+  api_service:
+    container_name: client
+    build: client/
+    networks:
+      - appnetwork
+    ports:
+      - 8080:8080
+    depends_on:
+      - product_service
+
+networks:
+  appnetwork:
+    driver: bridge
